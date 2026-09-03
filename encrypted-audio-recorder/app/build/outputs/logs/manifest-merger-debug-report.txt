@@ -1,0 +1,393 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:2:1-64:12
+INJECTED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:2:1-64:12
+INJECTED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:2:1-64:12
+INJECTED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:2:1-64:12
+MERGED from [androidx.databinding:viewbinding:8.5.0] /home/hartejh/.gradle/caches/9.3.0/transforms/573d1f6a40095805e24b896e18ea13fd/transformed/jetified-viewbinding-8.5.0/AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.android.material:material:1.11.0] /home/hartejh/.gradle/caches/9.3.0/transforms/a7b8af08fa419f8f6163d72c47cf2379/transformed/material-1.11.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/hartejh/.gradle/caches/9.3.0/transforms/fd864f95b1348a06081c122c893ddd41/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/59b27d4c6ee993f93560ebd3a16fbea0/transformed/jetified-appcompat-resources-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/ab68face4463c47b8fdb9f41c69d3578/transformed/appcompat-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/4d2aa1e7ceb3906d569a67568107cf11/transformed/swiperefreshlayout-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/3f42a9689450996ec20a89dbc37ee399/transformed/jetified-emoji2-views-helper-1.2.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b84082d19c222bbacc3edc081781221e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/341e330235166bd7c9118c65088c2c96/transformed/jetified-viewpager2-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.fragment:fragment:1.3.6] /home/hartejh/.gradle/caches/9.3.0/transforms/9c6b617dc04194e8cab46ff7f2bc2dbd/transformed/fragment-1.3.6/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.8.0] /home/hartejh/.gradle/caches/9.3.0/transforms/e6d7b726a734775e743c3fa298e0faa4/transformed/jetified-activity-1.8.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/fdf0f41c0cc75e3ab9c2bf1524120b3f/transformed/drawerlayout-1.1.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/edda8e29d288c173641b6f5b0995f1e7/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/eaf9bf2771dedd801a47ff1a96997d6d/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.transition:transition:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/f5760bca7be740c57313b0d7cc55a53b/transformed/transition-1.2.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/c059ba83b054f3531335f8370e982ae7/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/36e4ee1c7aad2028b73967b9a499bda4/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/629577f65f1ad13a8c9a452a9708e85a/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/78e66bca2bcaa10ed2a27a7df59ebf2b/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2dd43a59875f14aa3c75e8fa3643dc94/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/3269473fcefb68e0b7e0197b55c153b9/transformed/recyclerview-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b9c0980978818bfda7cd6e6f98847967/transformed/customview-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/hartejh/.gradle/caches/9.3.0/transforms/4dc3e041460818a13eb0a25dbeb9781d/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/225e939da16745d6872993e1a4ad6ecc/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/d2b0b82423bc56eaab6d6b1e0bd177ba/transformed/lifecycle-livedata-core-2.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/47e64dc1f72c59657ddc25158d441c01/transformed/lifecycle-livedata-2.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/78266942950889c31c1bfb544f853208/transformed/lifecycle-viewmodel-2.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/5e0e4b3e739ded5db1f51ac27f757df0/transformed/lifecycle-runtime-2.6.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/9b2e4d839b441d0191372a8400185d2c/transformed/jetified-lifecycle-viewmodel-savedstate-2.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core-ktx:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/3605bd93e897c67117b3c0de7dc6a47b/transformed/jetified-core-ktx-1.12.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/a805b783431fa36b658db323243c4820/transformed/jetified-annotation-experimental-1.3.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /home/hartejh/.gradle/caches/9.3.0/transforms/953f7351dbbebb70556f4bd3cb0aabff/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/adb50a09164ddae80d9fc6e6441be437/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cardview:cardview:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/3736cea624cfd7b9474e6003ad4a5775/transformed/cardview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/66d63512bee1ece51cc25a558d672da5/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/c02c0d77e3ded161d092e2a80a33ea98/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/c7e3b54e66243a34c02f3b9ffaa08c47/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/78134924e33aa5b609eef39421928f19/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b22f017d0be6bf9bec090245fe168cdb/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/7e392ac0e913304e757ecb207516bad8/transformed/documentfile-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/686de2ba45287195ff6189182992ebed/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/fe4bba609a96fda5d2fcbdca6295b5ff/transformed/print-1.0.0/AndroidManifest.xml:17:1-22:12
+	package
+		INJECTED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml
+	xmlns:tools
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:3:5-51
+	android:versionCode
+		INJECTED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.RECORD_AUDIO
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:6:5-71
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:6:22-68
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:7:5-77
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:7:22-74
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:8:5-77
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:8:22-74
+uses-permission#android.permission.FOREGROUND_SERVICE_MICROPHONE
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:9:5-88
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:9:22-85
+uses-permission#android.permission.READ_CONTACTS
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:10:5-72
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:10:22-69
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:11:5-75
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:11:22-72
+uses-permission#android.permission.READ_CALL_LOG
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:12:5-72
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:12:22-69
+uses-permission#android.permission.MANAGE_EXTERNAL_STORAGE
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:13:5-111
+	tools:ignore
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:13:80-108
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:13:22-79
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:14:5-81
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:14:22-78
+uses-permission#android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:15:5-95
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:15:22-92
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:16:5-80
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:16:22-77
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:17:5-81
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:17:22-78
+application
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:19:5-62:19
+INJECTED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:19:5-62:19
+MERGED from [com.google.android.material:material:1.11.0] /home/hartejh/.gradle/caches/9.3.0/transforms/a7b8af08fa419f8f6163d72c47cf2379/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.material:material:1.11.0] /home/hartejh/.gradle/caches/9.3.0/transforms/a7b8af08fa419f8f6163d72c47cf2379/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/hartejh/.gradle/caches/9.3.0/transforms/fd864f95b1348a06081c122c893ddd41/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/hartejh/.gradle/caches/9.3.0/transforms/fd864f95b1348a06081c122c893ddd41/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b84082d19c222bbacc3edc081781221e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b84082d19c222bbacc3edc081781221e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/225e939da16745d6872993e1a4ad6ecc/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/225e939da16745d6872993e1a4ad6ecc/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/c02c0d77e3ded161d092e2a80a33ea98/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/c02c0d77e3ded161d092e2a80a33ea98/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/c7e3b54e66243a34c02f3b9ffaa08c47/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/c7e3b54e66243a34c02f3b9ffaa08c47/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+	android:extractNativeLibs
+		INJECTED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:23:9-35
+	android:label
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:22:9-41
+	android:icon
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:21:9-58
+	android:allowBackup
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:20:9-36
+	android:theme
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:24:9-55
+activity#com.example.encryptedrecorder.MainActivity
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:26:9-33:20
+	android:exported
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:28:13-36
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:27:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:29:13-32:29
+action#android.intent.action.MAIN
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:30:17-69
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:30:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:31:17-77
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:31:27-74
+service#com.example.encryptedrecorder.AudioRecordingService
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:36:9-40:58
+	android:enabled
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:38:13-35
+	android:exported
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:39:13-37
+	android:foregroundServiceType
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:40:13-55
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:37:13-50
+receiver#com.example.encryptedrecorder.CallReceiver
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:42:9-49:20
+	android:exported
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:44:13-36
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:43:13-41
+intent-filter#action:name:android.intent.action.NEW_OUTGOING_CALL+action:name:android.intent.action.PHONE_STATE
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:45:13-48:29
+action#android.intent.action.PHONE_STATE
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:46:17-76
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:46:25-73
+action#android.intent.action.NEW_OUTGOING_CALL
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:47:17-82
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:47:25-79
+receiver#com.example.encryptedrecorder.BootReceiver
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:51:9-60:20
+	android:enabled
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:53:13-35
+	android:exported
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:54:13-36
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:52:13-41
+intent-filter#action:name:android.intent.action.BOOT_COMPLETED+action:name:android.intent.action.MY_PACKAGE_REPLACED+action:name:android.intent.action.QUICKBOOT_POWERON
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:55:13-59:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:56:17-79
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:56:25-76
+action#android.intent.action.MY_PACKAGE_REPLACED
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:57:17-84
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:57:25-81
+action#android.intent.action.QUICKBOOT_POWERON
+ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:58:17-82
+	android:name
+		ADDED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml:58:25-79
+uses-sdk
+INJECTED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml
+INJECTED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml
+MERGED from [androidx.databinding:viewbinding:8.5.0] /home/hartejh/.gradle/caches/9.3.0/transforms/573d1f6a40095805e24b896e18ea13fd/transformed/jetified-viewbinding-8.5.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.databinding:viewbinding:8.5.0] /home/hartejh/.gradle/caches/9.3.0/transforms/573d1f6a40095805e24b896e18ea13fd/transformed/jetified-viewbinding-8.5.0/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.material:material:1.11.0] /home/hartejh/.gradle/caches/9.3.0/transforms/a7b8af08fa419f8f6163d72c47cf2379/transformed/material-1.11.0/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.11.0] /home/hartejh/.gradle/caches/9.3.0/transforms/a7b8af08fa419f8f6163d72c47cf2379/transformed/material-1.11.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/hartejh/.gradle/caches/9.3.0/transforms/fd864f95b1348a06081c122c893ddd41/transformed/constraintlayout-2.1.4/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/hartejh/.gradle/caches/9.3.0/transforms/fd864f95b1348a06081c122c893ddd41/transformed/constraintlayout-2.1.4/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/59b27d4c6ee993f93560ebd3a16fbea0/transformed/jetified-appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/59b27d4c6ee993f93560ebd3a16fbea0/transformed/jetified-appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/ab68face4463c47b8fdb9f41c69d3578/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/ab68face4463c47b8fdb9f41c69d3578/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/4d2aa1e7ceb3906d569a67568107cf11/transformed/swiperefreshlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/4d2aa1e7ceb3906d569a67568107cf11/transformed/swiperefreshlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/3f42a9689450996ec20a89dbc37ee399/transformed/jetified-emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/3f42a9689450996ec20a89dbc37ee399/transformed/jetified-emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b84082d19c222bbacc3edc081781221e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b84082d19c222bbacc3edc081781221e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/341e330235166bd7c9118c65088c2c96/transformed/jetified-viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/341e330235166bd7c9118c65088c2c96/transformed/jetified-viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.3.6] /home/hartejh/.gradle/caches/9.3.0/transforms/9c6b617dc04194e8cab46ff7f2bc2dbd/transformed/fragment-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.3.6] /home/hartejh/.gradle/caches/9.3.0/transforms/9c6b617dc04194e8cab46ff7f2bc2dbd/transformed/fragment-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.8.0] /home/hartejh/.gradle/caches/9.3.0/transforms/e6d7b726a734775e743c3fa298e0faa4/transformed/jetified-activity-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.8.0] /home/hartejh/.gradle/caches/9.3.0/transforms/e6d7b726a734775e743c3fa298e0faa4/transformed/jetified-activity-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/fdf0f41c0cc75e3ab9c2bf1524120b3f/transformed/drawerlayout-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/fdf0f41c0cc75e3ab9c2bf1524120b3f/transformed/drawerlayout-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/edda8e29d288c173641b6f5b0995f1e7/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/edda8e29d288c173641b6f5b0995f1e7/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/eaf9bf2771dedd801a47ff1a96997d6d/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/eaf9bf2771dedd801a47ff1a96997d6d/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/f5760bca7be740c57313b0d7cc55a53b/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/f5760bca7be740c57313b0d7cc55a53b/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/c059ba83b054f3531335f8370e982ae7/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/c059ba83b054f3531335f8370e982ae7/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/36e4ee1c7aad2028b73967b9a499bda4/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/36e4ee1c7aad2028b73967b9a499bda4/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/629577f65f1ad13a8c9a452a9708e85a/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/629577f65f1ad13a8c9a452a9708e85a/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/78e66bca2bcaa10ed2a27a7df59ebf2b/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/78e66bca2bcaa10ed2a27a7df59ebf2b/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2dd43a59875f14aa3c75e8fa3643dc94/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2dd43a59875f14aa3c75e8fa3643dc94/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/3269473fcefb68e0b7e0197b55c153b9/transformed/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/3269473fcefb68e0b7e0197b55c153b9/transformed/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b9c0980978818bfda7cd6e6f98847967/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b9c0980978818bfda7cd6e6f98847967/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/hartejh/.gradle/caches/9.3.0/transforms/4dc3e041460818a13eb0a25dbeb9781d/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/hartejh/.gradle/caches/9.3.0/transforms/4dc3e041460818a13eb0a25dbeb9781d/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/225e939da16745d6872993e1a4ad6ecc/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/225e939da16745d6872993e1a4ad6ecc/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/d2b0b82423bc56eaab6d6b1e0bd177ba/transformed/lifecycle-livedata-core-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/d2b0b82423bc56eaab6d6b1e0bd177ba/transformed/lifecycle-livedata-core-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/47e64dc1f72c59657ddc25158d441c01/transformed/lifecycle-livedata-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/47e64dc1f72c59657ddc25158d441c01/transformed/lifecycle-livedata-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/78266942950889c31c1bfb544f853208/transformed/lifecycle-viewmodel-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/78266942950889c31c1bfb544f853208/transformed/lifecycle-viewmodel-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/5e0e4b3e739ded5db1f51ac27f757df0/transformed/lifecycle-runtime-2.6.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/5e0e4b3e739ded5db1f51ac27f757df0/transformed/lifecycle-runtime-2.6.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/9b2e4d839b441d0191372a8400185d2c/transformed/jetified-lifecycle-viewmodel-savedstate-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/9b2e4d839b441d0191372a8400185d2c/transformed/jetified-lifecycle-viewmodel-savedstate-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/3605bd93e897c67117b3c0de7dc6a47b/transformed/jetified-core-ktx-1.12.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/3605bd93e897c67117b3c0de7dc6a47b/transformed/jetified-core-ktx-1.12.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/a805b783431fa36b658db323243c4820/transformed/jetified-annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/a805b783431fa36b658db323243c4820/transformed/jetified-annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /home/hartejh/.gradle/caches/9.3.0/transforms/953f7351dbbebb70556f4bd3cb0aabff/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:20:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /home/hartejh/.gradle/caches/9.3.0/transforms/953f7351dbbebb70556f4bd3cb0aabff/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/adb50a09164ddae80d9fc6e6441be437/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/adb50a09164ddae80d9fc6e6441be437/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/3736cea624cfd7b9474e6003ad4a5775/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/3736cea624cfd7b9474e6003ad4a5775/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/66d63512bee1ece51cc25a558d672da5/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/66d63512bee1ece51cc25a558d672da5/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/c02c0d77e3ded161d092e2a80a33ea98/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/c02c0d77e3ded161d092e2a80a33ea98/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/c7e3b54e66243a34c02f3b9ffaa08c47/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/c7e3b54e66243a34c02f3b9ffaa08c47/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/78134924e33aa5b609eef39421928f19/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/78134924e33aa5b609eef39421928f19/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b22f017d0be6bf9bec090245fe168cdb/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b22f017d0be6bf9bec090245fe168cdb/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/7e392ac0e913304e757ecb207516bad8/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/7e392ac0e913304e757ecb207516bad8/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/686de2ba45287195ff6189182992ebed/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/686de2ba45287195ff6189182992ebed/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/fe4bba609a96fda5d2fcbdca6295b5ff/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /home/hartejh/.gradle/caches/9.3.0/transforms/fe4bba609a96fda5d2fcbdca6295b5ff/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
+	android:targetSdkVersion
+		INJECTED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/hartejh/.gemini/antigravity/scratch/encrypted-audio-recorder/app/src/main/AndroidManifest.xml
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b84082d19c222bbacc3edc081781221e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/225e939da16745d6872993e1a4ad6ecc/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/225e939da16745d6872993e1a4ad6ecc/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/c7e3b54e66243a34c02f3b9ffaa08c47/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/hartejh/.gradle/caches/9.3.0/transforms/c7e3b54e66243a34c02f3b9ffaa08c47/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b84082d19c222bbacc3edc081781221e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b84082d19c222bbacc3edc081781221e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b84082d19c222bbacc3edc081781221e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b84082d19c222bbacc3edc081781221e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b84082d19c222bbacc3edc081781221e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b84082d19c222bbacc3edc081781221e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/hartejh/.gradle/caches/9.3.0/transforms/b84082d19c222bbacc3edc081781221e/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+permission#com.example.encryptedrecorder.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+uses-permission#com.example.encryptedrecorder.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /home/hartejh/.gradle/caches/9.3.0/transforms/8f99873db4e99b15f6383685a55d7636/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/225e939da16745d6872993e1a4ad6ecc/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/225e939da16745d6872993e1a4ad6ecc/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/hartejh/.gradle/caches/9.3.0/transforms/225e939da16745d6872993e1a4ad6ecc/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:30:17-78
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/hartejh/.gradle/caches/9.3.0/transforms/2a2270f108f7305a6be1a9bd1e224456/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92

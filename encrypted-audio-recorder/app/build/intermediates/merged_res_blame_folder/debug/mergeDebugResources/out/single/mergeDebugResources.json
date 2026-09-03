@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-debug-4:/drawable_bg_badge.xml.flat",
+        "source": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-main-6:/drawable/bg_badge.xml"
+    },
+    {
+        "merged": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-debug-4:/layout_item_encrypted_file.xml.flat",
+        "source": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-main-6:/layout/item_encrypted_file.xml"
+    },
+    {
+        "merged": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-debug-4:/layout_item_contact_checkbox.xml.flat",
+        "source": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-main-6:/layout/item_contact_checkbox.xml"
+    },
+    {
+        "merged": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-debug-4:/drawable_bg_container.xml.flat",
+        "source": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-main-6:/drawable/bg_container.xml"
+    },
+    {
+        "merged": "com.example.encryptedrecorder.app-debug-4:/layout_item_encrypted_file.xml.flat",
+        "source": "com.example.encryptedrecorder.app-main-6:/layout/item_encrypted_file.xml"
+    },
+    {
+        "merged": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-debug-4:/drawable_bg_card_dark.xml.flat",
+        "source": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-main-6:/drawable/bg_card_dark.xml"
+    },
+    {
+        "merged": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-debug-4:/layout_dialog_audio_player.xml.flat",
+        "source": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-main-6:/layout/dialog_audio_player.xml"
+    },
+    {
+        "merged": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-debug-4:/layout_item_dialog_single.xml.flat",
+        "source": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-main-6:/layout/item_dialog_single.xml"
+    },
+    {
+        "merged": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-debug-4:/layout_activity_main.xml.flat",
+        "source": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-main-6:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-debug-4:/drawable_bg_scrollbar_thumb.xml.flat",
+        "source": "/home/hartejh/.gradle/daemon/9.3.0/com.example.encryptedrecorder.app-main-6:/drawable/bg_scrollbar_thumb.xml"
+    }
+]

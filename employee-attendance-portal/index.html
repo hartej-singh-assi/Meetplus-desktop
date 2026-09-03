@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulseHR Pro - Enterprise HRMS Auth & Hierarchy</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- FULL SCREEN LOGIN PORTAL OVERLAY -->
+  <div class="login-screen-overlay" id="loginContainer">
+    <div class="login-card-box">
+      
+      <!-- Brand Information Column -->
+      <div class="login-brand-side">
+        <div>
+          <div class="login-logo-badge">
+            <i class="fa-solid fa-layer-group"></i>
+          </div>
+          <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 6px;">PulseHR <span style="color: var(--primary-accent);">Pro</span></h2>
+          <p style="font-size: 0.875rem; color: var(--text-muted);">Enterprise Multi-Role HRMS & Reporting Hierarchy Platform</p>
+        </div>
+
+        <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 20px;">
+          <i class="fa-solid fa-shield-halved" style="color: var(--color-present);"></i> Strict Hierarchy Approval Rules Enforced
+        </div>
+      </div>
+
+      <!-- Login Credentials & Quick Selector -->
+      <div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px;">Select User Persona</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Click any account below to sign in and test role-based hierarchy permissions:</p>
+
+        <!-- Demo User 1: John Doe (Employee - IC) -->
+        <div class="demo-account-card" onclick="quickLogin('john.doe@company.com')">
+          <div class="user-avatar" style="background: #3b82f6;">JD</div>
+          <div style="flex-grow: 1;">
+            <div style="font-size: 0.95rem; font-weight: 700;">John Doe</div>
+            <div style="font-size: 0.775rem; color: var(--text-muted);">Sr. Software Engineer (IC)</div>
+            <span class="role-tag-badge ic">Level 3 • Cannot Approve</span>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="color: var(--text-dim);"></i>
+        </div>
+
+        <!-- Demo User 2: Michael Vance (Reporting Manager) -->
+        <div class="demo-account-card" onclick="quickLogin('michael.vance@company.com')">
+          <div class="user-avatar" style="background: #f59e0b;">MV</div>
+          <div style="flex-grow: 1;">
+            <div style="font-size: 0.95rem; font-weight: 700;">Michael Vance</div>
+            <div style="font-size: 0.775rem; color: var(--text-muted);">Engineering Manager (Reporting Mgr)</div>
+            <span class="role-tag-badge manager">Level 2 • Approves Team Requests</span>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="color: var(--text-dim);"></i>
+        </div>
+
+        <!-- Demo User 3: Sarah Jenkins (VP & HR Admin) -->
+        <div class="demo-account-card" onclick="quickLogin('sarah.jenkins@company.com')">
+          <div class="user-avatar" style="background: #8b5cf6;">SJ</div>
+          <div style="flex-grow: 1;">
+            <div style="font-size: 0.95rem; font-weight: 700;">Sarah Jenkins</div>
+            <div style="font-size: 0.775rem; color: var(--text-muted);">VP of HR & Operations (HR Admin)</div>
+            <span class="role-tag-badge admin">Level 1 • Global HR Approval</span>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="color: var(--text-dim);"></i>
+        </div>
+
+        <form id="manualLoginForm" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" id="loginEmail" placeholder="john.doe@company.com" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-input" value="••••••••" required>
+          </div>
+          <button type="submit" class="punch-button clock-in" style="font-size: 0.95rem; padding: 12px;"><i class="fa-solid fa-right-to-bracket"></i> Sign In</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MAIN HRMS APPLICATION PORTAL (HIDDEN UNTIL AUTHENTICATED) -->
+  <div class="app-container" id="appContent" style="display: none;">
+    
+    <!-- Top Header Navigation -->
+    <header class="top-header glass-card">
+      <div class="brand-section">
+        <div class="brand-logo">
+          <i class="fa-solid fa-layer-group"></i>
+        </div>
+        <div class="brand-title">
+          <h1>PulseHR <span>Pro</span></h1>
+          <p id="portalSubhead">Enterprise Role-Based HRMS Platform</p>
+        </div>
+      </div>
+
+      <div class="user-profile-widget">
+        <div class="employee-pill">
+          <div class="user-avatar" id="avatarInitials">JD</div>
+          <div class="user-info">
+            <span class="user-name" id="userNameDisplay">John Doe</span>
+            <span class="user-role" id="userRoleDisplay">EMP-84920 • Sr. Software Engineer</span>
+            <span style="font-size: 0.68rem; color: var(--primary-accent); font-weight: 600;" id="userMgtTag">Reporting to: Michael Vance</span>
+          </div>
+        </div>
+
+        <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <button class="action-btn btn-danger" id="logoutBtn" title="Sign Out">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Module Navigation Bar -->
+    <nav class="module-nav-bar glass-card">
+      <button class="nav-tab-btn active" data-tab="tabAttendance">
+        <i class="fa-solid fa-calendar-check"></i> Attendance & Clock
+      </button>
+      <button class="nav-tab-btn" data-tab="tabWfh">
+        <i class="fa-solid fa-house-laptop"></i> WFH & Comp-Off
+      </button>
+      <button class="nav-tab-btn" data-tab="tabExpenses">
+        <i class="fa-solid fa-receipt"></i> Reimbursements
+      </button>
+      <button class="nav-tab-btn" data-tab="tabPayslips">
+        <i class="fa-solid fa-money-check-dollar"></i> Payroll & Payslips
+      </button>
+      <button class="nav-tab-btn" data-tab="tabPolicies">
+        <i class="fa-solid fa-book"></i> HR Policies
+      </button>
+      <button class="nav-tab-btn" data-tab="tabProfile">
+        <i class="fa-solid fa-id-card"></i> 360° Profile
+      </button>
+      <!-- Hierarchy Protected Tab: Only for Managers / HR -->
+      <button class="nav-tab-btn" data-tab="tabHrQueue" id="hrQueueNavTab" style="display: none;">
+        <i class="fa-solid fa-user-check"></i> Approvals Workspace <span class="badge-counter" id="hrQueueCount">3</span>
+      </button>
+    </nav>
+
+    <!-- MODULE 1: ATTENDANCE & PUNCH CLOCK -->
+    <main class="module-view active" id="tabAttendance">
+      <section class="dashboard-grid">
+        <div class="clock-widget glass-card">
+          <div class="clock-header">
+            <h3>Daily Punch Clock</h3>
+            <span class="shift-badge"><i class="fa-regular fa-clock"></i> Shift: 09:00 AM - 06:00 PM</span>
+          </div>
+
+          <div class="live-clock-display">
+            <div class="clock-time" id="digitalClock">12:00:00 PM</div>
+            <div class="clock-date" id="digitalDate">Monday, 10 August 2026</div>
+          </div>
+
+          <div class="punch-status-container">
+            <div class="status-pill-large">
+              <span class="status-indicator-dot" id="statusDot"></span>
+              <span id="statusText">Not Punched In</span>
+            </div>
+          </div>
+
+          <button class="punch-button clock-in" id="punchBtn">
+            <i class="fa-solid fa-right-to-bracket"></i> <span id="punchBtnText">CLOCK IN</span>
+          </button>
+
+          <div class="punch-details-row">
+            <div><i class="fa-solid fa-arrow-down-long"></i> In: <strong id="punchInTimeVal">--:--</strong></div>
+            <div><i class="fa-solid fa-arrow-up-long"></i> Out: <strong id="punchOutTimeVal">--:--</strong></div>
+            <div><i class="fa-solid fa-stopwatch"></i> Work: <strong id="totalWorkedVal">0h 0m</strong></div>
+          </div>
+        </div>
+
+        <div class="stats-cards-grid">
+          <div class="stat-card glass-card">
+            <div class="stat-header">
+              <span class="stat-title">Attendance Rate</span>
+              <div class="stat-icon-wrapper present"><i class="fa-solid fa-chart-line"></i></div>
+            </div>
+            <div class="stat-value" id="statRate">95.2%</div>
+            <div class="stat-subtext"><span>Target: 90%</span></div>
+            <div class="stat-progress-bar">
+              <div class="stat-progress-fill" id="progressRate" style="width: 95.2%; background: var(--color-present);"></div>
+            </div>
+          </div>
+
+          <div class="stat-card glass-card">
+            <div class="stat-header">
+              <span class="stat-title">Present Days</span>
+              <div class="stat-icon-wrapper hours"><i class="fa-solid fa-user-check"></i></div>
+            </div>
+            <div class="stat-value" id="statPresentDays">19 <span style="font-size: 1rem; font-weight: normal; color: var(--text-muted);">/ 22</span></div>
+            <div class="stat-subtext"><span id="statOnTime">17 On-time</span> • <span id="statLate">2 Late</span></div>
+            <div class="stat-progress-bar">
+              <div class="stat-progress-fill" id="progressPresent" style="width: 86%; background: var(--primary-accent);"></div>
+            </div>
+          </div>
+
+          <div class="stat-card glass-card">
+            <div class="stat-header">
+              <span class="stat-title">Total Working Hours</span>
+              <div class="stat-icon-wrapper late"><i class="fa-solid fa-business-time"></i></div>
+            </div>
+            <div class="stat-value" id="statTotalHours">158.5 hrs</div>
+            <div class="stat-subtext"><span>Avg Daily: 8.3 hrs</span></div>
+            <div class="stat-progress-bar">
+              <div class="stat-progress-fill" style="width: 92%; background: var(--color-late);"></div>
+            </div>
+          </div>
+
+          <div class="stat-card glass-card">
+            <div class="stat-header">
+              <span class="stat-title">Leave Balance</span>
+              <div class="stat-icon-wrapper leave"><i class="fa-solid fa-plane-departure"></i></div>
+            </div>
+            <div class="stat-value" id="statLeaveBal">12 Days</div>
+            <div class="stat-subtext"><span>Casual: 5 • Sick: 7</span></div>
+            <div class="stat-progress-bar">
+              <div class="stat-progress-fill" style="width: 70%; background: var(--color-leave);"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Calendar Section -->
+      <section class="calendar-section glass-card">
+        <div class="calendar-toolbar">
+          <div class="calendar-month-nav">
+            <button class="nav-arrow-btn" id="prevMonthBtn"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="calendar-month-title" id="calendarMonthTitle">August 2026</div>
+            <button class="nav-arrow-btn" id="nextMonthBtn"><i class="fa-solid fa-chevron-right"></i></button>
+            <button class="action-btn" id="todayBtn"><i class="fa-solid fa-location-crosshairs"></i> Today</button>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button class="action-btn btn-primary" id="openLeaveModalBtn"><i class="fa-solid fa-calendar-plus"></i> Apply Leave</button>
+          </div>
+        </div>
+
+        <div class="calendar-grid-wrapper">
+          <div class="calendar-weekdays">
+            <div class="weekday-name">Mon</div><div class="weekday-name">Tue</div><div class="weekday-name">Wed</div>
+            <div class="weekday-name">Thu</div><div class="weekday-name">Fri</div><div class="weekday-name">Sat</div><div class="weekday-name">Sun</div>
+          </div>
+          <div class="calendar-days-grid" id="calendarDaysGrid"></div>
+        </div>
+      </section>
+
+      <!-- History Table -->
+      <section class="history-section glass-card">
+        <div class="section-header-toolbar">
+          <h2 class="section-title"><i class="fa-solid fa-list-check"></i> Attendance Record Logs</h2>
+          <div class="filters-group">
+            <div class="search-input-wrapper">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="searchInput" placeholder="Search date or status...">
+            </div>
+            <select class="select-filter" id="statusFilterSelect">
+              <option value="ALL">All Statuses</option>
+              <option value="PRESENT">Present</option>
+              <option value="LATE">Late</option>
+              <option value="HALFDAY">Half Day</option>
+              <option value="ABSENT">Absent</option>
+              <option value="LEAVE">On Leave</option>
+            </select>
+            <button class="action-btn" id="exportCsvBtn"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="attendance-table">
+            <thead>
+              <tr>
+                <th>Date</th><th>Shift Schedule</th><th>Clock In</th><th>Clock Out</th><th>Total Hours</th><th>Status</th><th>Notes</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="attendanceTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- MODULE 2: WFH & COMP-OFF -->
+    <main class="module-view" id="tabWfh">
+      <div class="section-header-toolbar glass-card" style="padding: 20px;">
+        <div>
+          <h2 class="section-title"><i class="fa-solid fa-house-laptop"></i> Work From Home & Comp-Off Management</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Request remote work days or claim compensatory credits for overtime/weekend hours.</p>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button class="action-btn btn-primary" id="openWfhModalBtn"><i class="fa-solid fa-plus"></i> Request WFH</button>
+          <button class="action-btn btn-purple" id="openCompOffModalBtn"><i class="fa-solid fa-business-time"></i> Claim Comp-Off</button>
+        </div>
+      </div>
+
+      <div class="cards-three-grid">
+        <div class="content-box-card glass-card">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <span class="status-badge-chip present">APPROVED</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Aug 14, 2026</span>
+          </div>
+          <div>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;">Work From Home</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">"ISP Maintenance & Fiber Installation at Home Office"</p>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-dim); border-top: 1px solid var(--border-color); padding-top: 10px;">
+            Approved by: Michael Vance (Reporting Manager)
+          </div>
+        </div>
+
+        <div class="content-box-card glass-card">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <span class="status-badge-chip late">PENDING APPROVAL</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Aug 21, 2026</span>
+          </div>
+          <div>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;">Work From Home</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">"Severe Monsoon Weather Warning"</p>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-dim); border-top: 1px solid var(--border-color); padding-top: 10px;">
+            Sent to Manager: Michael Vance
+          </div>
+        </div>
+
+        <div class="content-box-card glass-card">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <span class="status-badge-chip leave">CREDITED (+1 DAY)</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Aug 02, 2026</span>
+          </div>
+          <div>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;">Compensatory Off</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">"Production Server Migration on Sunday (8 hrs)"</p>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-dim); border-top: 1px solid var(--border-color); padding-top: 10px;">
+            Comp-Off Balance: 2 Days Available
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- MODULE 3: REIMBURSEMENTS & EXPENSE CLAIMS -->
+    <main class="module-view" id="tabExpenses">
+      <div class="section-header-toolbar glass-card" style="padding: 20px;">
+        <div>
+          <h2 class="section-title"><i class="fa-solid fa-receipt"></i> Expense Reimbursement Claims</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Submit business expense claims for internet, travel, client meals, and equipment.</p>
+        </div>
+        <button class="action-btn btn-success" id="openExpenseModalBtn"><i class="fa-solid fa-plus"></i> Submit Expense Claim</button>
+      </div>
+
+      <div class="history-section glass-card">
+        <div class="table-responsive">
+          <table class="attendance-table">
+            <thead>
+              <tr>
+                <th>Claim ID</th><th>Category</th><th>Expense Date</th><th>Amount</th><th>Receipt Proof</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="expenseTableBody">
+              <tr>
+                <td><strong>#EXP-9201</strong></td>
+                <td>High-Speed Internet Allowance</td>
+                <td>Aug 01, 2026</td>
+                <td><strong>$85.00</strong></td>
+                <td><a href="#" style="color: var(--primary-accent);"><i class="fa-solid fa-paperclip"></i> fiber_bill_aug.pdf</a></td>
+                <td><span class="status-badge-chip present">APPROVED</span></td>
+                <td><button class="action-btn" style="padding: 4px 10px; font-size: 0.75rem;"><i class="fa-solid fa-eye"></i> View</button></td>
+              </tr>
+              <tr>
+                <td><strong>#EXP-9184</strong></td>
+                <td>Client Dinner & Catering</td>
+                <td>Jul 28, 2026</td>
+                <td><strong>$142.50</strong></td>
+                <td><a href="#" style="color: var(--primary-accent);"><i class="fa-solid fa-paperclip"></i> dinner_receipt.jpg</a></td>
+                <td><span class="status-badge-chip present">PAID & DISBURSED</span></td>
+                <td><button class="action-btn" style="padding: 4px 10px; font-size: 0.75rem;"><i class="fa-solid fa-eye"></i> View</button></td>
+              </tr>
+              <tr>
+                <td><strong>#EXP-9302</strong></td>
+                <td>Ergonomic Desk Accessories</td>
+                <td>Aug 08, 2026</td>
+                <td><strong>$190.00</strong></td>
+                <td><a href="#" style="color: var(--primary-accent);"><i class="fa-solid fa-paperclip"></i> invoice_hardware.pdf</a></td>
+                <td><span class="status-badge-chip late">UNDER MANAGER REVIEW</span></td>
+                <td><button class="action-btn" style="padding: 4px 10px; font-size: 0.75rem;"><i class="fa-solid fa-eye"></i> View</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- MODULE 4: PAYROLL & PAYSLIPS -->
+    <main class="module-view" id="tabPayslips">
+      <div class="section-header-toolbar glass-card" style="padding: 20px;">
+        <div>
+          <h2 class="section-title"><i class="fa-solid fa-money-check-dollar"></i> Payroll & Monthly Salary Slips</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">View earnings, tax deductions, Provident Fund contributions, and download official payslips.</p>
+        </div>
+      </div>
+
+      <div class="cards-three-grid">
+        <div class="content-box-card glass-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-accent);">JULY 2026</span>
+            <span class="status-badge-chip present">DISBURSED</span>
+          </div>
+          <div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: var(--text-main);">$6,450.00</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Net Take-Home Pay</div>
+          </div>
+          <button class="action-btn btn-primary" onclick="viewPayslipModal('July 2026', 6450.00)"><i class="fa-solid fa-file-invoice-dollar"></i> View Payslip</button>
+        </div>
+
+        <div class="content-box-card glass-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-accent);">JUNE 2026</span>
+            <span class="status-badge-chip present">DISBURSED</span>
+          </div>
+          <div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: var(--text-main);">$6,450.00</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Net Take-Home Pay</div>
+          </div>
+          <button class="action-btn btn-primary" onclick="viewPayslipModal('June 2026', 6450.00)"><i class="fa-solid fa-file-invoice-dollar"></i> View Payslip</button>
+        </div>
+
+        <div class="content-box-card glass-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-accent);">MAY 2026</span>
+            <span class="status-badge-chip present">DISBURSED</span>
+          </div>
+          <div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: var(--text-main);">$6,750.00</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Net Take-Home Pay (Includes Bonus)</div>
+          </div>
+          <button class="action-btn btn-primary" onclick="viewPayslipModal('May 2026', 6750.00)"><i class="fa-solid fa-file-invoice-dollar"></i> View Payslip</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- MODULE 5: COMPANY POLICIES -->
+    <main class="module-view" id="tabPolicies">
+      <div class="section-header-toolbar glass-card" style="padding: 20px;">
+        <div>
+          <h2 class="section-title"><i class="fa-solid fa-book"></i> Company Policies & Employee Handbook</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Official compliance rules, attendance standards, leave policies, and code of conduct.</p>
+        </div>
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="policySearchInput" placeholder="Search policies...">
+        </div>
+      </div>
+
+      <div class="cards-three-grid">
+        <div class="content-box-card glass-card">
+          <div style="font-size: 2rem; color: var(--primary-accent);"><i class="fa-solid fa-clock"></i></div>
+          <div>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 6px;">Attendance & Punctuality Policy</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Guidelines on shift timings, grace period thresholds (15 mins), half-day calculations, and regularization rules.</p>
+          </div>
+          <button class="action-btn" onclick="openPolicyModal('Attendance Policy', 'Standard shift hours are 09:00 AM to 06:00 PM. Grace period allowed is 15 minutes. 3 late clock-ins in a month incur half-day deduction.')"><i class="fa-solid fa-eye"></i> Read Policy</button>
+        </div>
+
+        <div class="content-box-card glass-card">
+          <div style="font-size: 2rem; color: var(--color-leave);"><i class="fa-solid fa-plane-departure"></i></div>
+          <div>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 6px;">Leave & Vacation Guidelines</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Annual entitlement for Casual Leaves (12), Sick Leaves (10), and Privilege Leaves (15) with carry-forward rules.</p>
+          </div>
+          <button class="action-btn" onclick="openPolicyModal('Leave Policy', 'Leaves must be submitted at least 48 hours in advance except for emergency sick leave. Maximum carry forward per year is 10 days.')"><i class="fa-solid fa-eye"></i> Read Policy</button>
+        </div>
+
+        <div class="content-box-card glass-card">
+          <div style="font-size: 2rem; color: var(--color-present);"><i class="fa-solid fa-house-laptop"></i></div>
+          <div>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 6px;">Remote Work & WFH Policy</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Eligible WFH quota (up to 4 days per month), core online availability hours, and cybersecurity measures.</p>
+          </div>
+          <button class="action-btn" onclick="openPolicyModal('Remote Work Policy', 'Employees can request up to 4 WFH days per month. Core hours 10:00 AM - 05:00 PM must be online with active Slack/Teams presence.')"><i class="fa-solid fa-eye"></i> Read Policy</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- MODULE 6: 360° EMPLOYEE PROFILE -->
+    <main class="module-view" id="tabProfile">
+      <div class="profile-header-card glass-card">
+        <div class="profile-large-avatar" id="profAvatar">JD</div>
+        <div style="flex-grow: 1;">
+          <h2 style="font-size: 1.5rem; font-weight: 800;" id="profName">John Doe</h2>
+          <p style="font-size: 0.9rem; color: var(--text-muted);" id="profTitle">Senior Software Engineer • Engineering Department</p>
+          <div style="display: flex; gap: 16px; margin-top: 8px; font-size: 0.8rem; color: var(--text-dim);">
+            <span id="profEmail"><i class="fa-solid fa-envelope"></i> john.doe@company.com</span>
+            <span><i class="fa-solid fa-phone"></i> +1 (555) 019-2834</span>
+            <span><i class="fa-solid fa-location-dot"></i> HQ Office Tech Park (Full-time)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card" style="padding: 24px;">
+        <div class="profile-tabs-nav">
+          <button class="profile-tab-btn active" data-proftab="profPersonal">Personal Details</button>
+          <button class="profile-tab-btn" data-proftab="profJob">Job & Organization</button>
+          <button class="profile-tab-btn" data-proftab="profBank">Bank & Tax Info</button>
+          <button class="profile-tab-btn" data-proftab="profDocs">Document Vault</button>
+        </div>
+
+        <div id="profPersonal" class="prof-tab-content">
+          <div class="info-details-grid">
+            <div class="info-field-item"><span class="info-label">Full Name</span><span class="info-value" id="valFullName">Johnathan Edward Doe</span></div>
+            <div class="info-field-item"><span class="info-label">Date of Birth</span><span class="info-value">March 14, 1992</span></div>
+            <div class="info-field-item"><span class="info-label">Gender</span><span class="info-value">Male</span></div>
+            <div class="info-field-item"><span class="info-label">Blood Group</span><span class="info-value">O Positive (O+)</span></div>
+            <div class="info-field-item"><span class="info-label">Emergency Contact</span><span class="info-value">Sarah Doe (Spouse) - +1 (555) 019-9988</span></div>
+            <div class="info-field-item"><span class="info-label">Residential Address</span><span class="info-value">742 Evergreen Terrace, Suite 4B, Springfield</span></div>
+          </div>
+        </div>
+
+        <div id="profJob" class="prof-tab-content" style="display: none;">
+          <div class="info-details-grid">
+            <div class="info-field-item"><span class="info-label">Employee ID</span><span class="info-value" id="valEmpId">EMP-84920</span></div>
+            <div class="info-field-item"><span class="info-label">Department</span><span class="info-value">Product Engineering</span></div>
+            <div class="info-field-item"><span class="info-label">Designation</span><span class="info-value" id="valDesignation">Senior Software Engineer</span></div>
+            <div class="info-field-item"><span class="info-label">Reporting Manager</span><span class="info-value" id="valReportingMgr">Michael Vance (Engineering Manager)</span></div>
+            <div class="info-field-item"><span class="info-label">Date of Joining</span><span class="info-value">June 01, 2022</span></div>
+            <div class="info-field-item"><span class="info-label">Work Shift</span><span class="info-value">Standard General Shift (09:00 - 18:00)</span></div>
+          </div>
+        </div>
+
+        <div id="profBank" class="prof-tab-content" style="display: none;">
+          <div class="info-details-grid">
+            <div class="info-field-item"><span class="info-label">Bank Name</span><span class="info-value">Chase National Bank</span></div>
+            <div class="info-field-item"><span class="info-label">Account Number</span><span class="info-value">•••• •••• 9841</span></div>
+            <div class="info-field-item"><span class="info-label">IFSC / Swift Code</span><span class="info-value">CHASUS33XXX</span></div>
+            <div class="info-field-item"><span class="info-label">PAN / Tax ID</span><span class="info-value">ABCDE1234F</span></div>
+            <div class="info-field-item"><span class="info-label">PF UAN Number</span><span class="info-value">100984920112</span></div>
+            <div class="info-field-item"><span class="info-label">Tax Regime</span><span class="info-value">New Tax Regime (FY 2026-27)</span></div>
+          </div>
+        </div>
+
+        <div id="profDocs" class="prof-tab-content" style="display: none;">
+          <div class="info-details-grid">
+            <div class="info-field-item"><span class="info-label">Offer Letter</span><span class="info-value"><a href="#" style="color: var(--primary-accent);"><i class="fa-solid fa-file-pdf"></i> offer_letter_signed.pdf</a></span></div>
+            <div class="info-field-item"><span class="info-label">Employment Agreement</span><span class="info-value"><a href="#" style="color: var(--primary-accent);"><i class="fa-solid fa-file-pdf"></i> NDA_agreement.pdf</a></span></div>
+            <div class="info-field-item"><span class="info-label">Passport / ID Proof</span><span class="info-value"><a href="#" style="color: var(--primary-accent);"><i class="fa-solid fa-file-image"></i> passport_scan.jpg</a></span></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- MODULE 7: HIERARCHY PROTECTED APPROVALS WORKSPACE -->
+    <main class="module-view" id="tabHrQueue">
+      <div class="section-header-toolbar glass-card" style="padding: 20px;">
+        <div>
+          <h2 class="section-title" style="color: var(--color-leave);"><i class="fa-solid fa-user-shield"></i> Approvals Workspace (Hierarchy Protected)</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);" id="approvalScopeText">Review pending employee requests from your direct reports.</p>
+        </div>
+      </div>
+
+      <div class="history-section glass-card">
+        <div class="table-responsive">
+          <table class="attendance-table">
+            <thead>
+              <tr>
+                <th>Request Type</th><th>Employee Name</th><th>Details / Reason</th><th>Submitted Date</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="hrQueueTableBody">
+              <tr>
+                <td><span class="status-badge-chip leave">LEAVE REQUEST</span></td>
+                <td><strong>Alex Rivera (EMP-84931)</strong></td>
+                <td>Casual Leave for 2 days (Aug 18 - Aug 19) • Reason: Family Function</td>
+                <td>Aug 09, 2026</td>
+                <td>
+                  <button class="action-btn btn-success" style="padding: 4px 10px; font-size: 0.75rem;" onclick="approveHrItem(this, 'Alex Rivera Leave')"><i class="fa-solid fa-check"></i> Approve</button>
+                  <button class="action-btn btn-danger" style="padding: 4px 10px; font-size: 0.75rem;" onclick="rejectHrItem(this)"><i class="fa-solid fa-xmark"></i> Reject</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="status-badge-chip late">WFH REQUEST</span></td>
+                <td><strong>John Doe (EMP-84920)</strong></td>
+                <td>Remote Work on Aug 14 • Reason: ISP Broadband maintenance</td>
+                <td>Aug 10, 2026</td>
+                <td>
+                  <button class="action-btn btn-success" style="padding: 4px 10px; font-size: 0.75rem;" onclick="approveHrItem(this, 'John Doe WFH')"><i class="fa-solid fa-check"></i> Approve</button>
+                  <button class="action-btn btn-danger" style="padding: 4px 10px; font-size: 0.75rem;" onclick="rejectHrItem(this)"><i class="fa-solid fa-xmark"></i> Reject</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="status-badge-chip present">EXPENSE CLAIM</span></td>
+                <td><strong>John Doe (EMP-84920)</strong></td>
+                <td>#EXP-9302 Ergonomic Desk Hardware ($190.00)</td>
+                <td>Aug 08, 2026</td>
+                <td>
+                  <button class="action-btn btn-success" style="padding: 4px 10px; font-size: 0.75rem;" onclick="approveHrItem(this, 'John Doe Expense')"><i class="fa-solid fa-check"></i> Approve</button>
+                  <button class="action-btn btn-danger" style="padding: 4px 10px; font-size: 0.75rem;" onclick="rejectHrItem(this)"><i class="fa-solid fa-xmark"></i> Reject</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Day Details Modal -->
+  <div class="modal-backdrop" id="dayDetailModal">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalDateTitle">Attendance Details - Aug 10, 2026</h3>
+        <button class="modal-close-btn closeModalBtn" data-modal="dayDetailModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; gap: 12px; margin-bottom: 20px; align-items: center;">
+          <span class="status-badge-chip present" id="modalStatusBadge">Present</span>
+          <span style="font-size: 0.85rem; color: var(--text-muted);" id="modalShiftText">Standard Shift (09:00 - 18:00)</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Clock In Time</div>
+            <div style="font-size: 1.1rem; font-weight: 700;" id="modalClockIn">09:05 AM</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Clock Out Time</div>
+            <div style="font-size: 1.1rem; font-weight: 700;" id="modalClockOut">06:12 PM</div>
+          </div>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Total Hours Worked</div>
+          <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary-accent);" id="modalHours">9.1 hrs</div>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Work Notes</div>
+          <div style="font-size: 0.875rem; color: var(--text-main); font-style: italic;" id="modalNotes">"Completed HRMS multi-user hierarchy auth."</div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="action-btn" id="regularizeFromModalBtn"><i class="fa-solid fa-wrench"></i> Regularize Punch</button>
+        <button class="action-btn btn-primary closeModalBtn" data-modal="dayDetailModal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leave Request Modal -->
+  <div class="modal-backdrop" id="leaveModal">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-plane-departure"></i> Apply for Leave</h3>
+        <button class="modal-close-btn closeModalBtn" data-modal="leaveModal">&times;</button>
+      </div>
+      <form id="leaveForm">
+        <div class="form-group">
+          <label class="form-label">Leave Type</label>
+          <select class="form-select" id="leaveType" required>
+            <option value="Casual Leave">Casual Leave (5 Available)</option>
+            <option value="Sick Leave">Sick Leave (7 Available)</option>
+            <option value="Privilege Leave">Privilege Leave (10 Available)</option>
+          </select>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Start Date</label>
+            <input type="date" class="form-input" id="leaveStartDate" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">End Date</label>
+            <input type="date" class="form-input" id="leaveEndDate" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reason / Remarks</label>
+          <textarea class="form-textarea" id="leaveReason" placeholder="Explain the reason for leave application..." required></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="action-btn closeModalBtn" data-modal="leaveModal">Cancel</button>
+          <button type="submit" class="action-btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Submit Leave</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- WFH Request Modal -->
+  <div class="modal-backdrop" id="wfhModal">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-house-laptop"></i> Request Work From Home</h3>
+        <button class="modal-close-btn closeModalBtn" data-modal="wfhModal">&times;</button>
+      </div>
+      <form id="wfhForm">
+        <div class="form-group">
+          <label class="form-label">Requested WFH Date</label>
+          <input type="date" class="form-input" id="wfhDate" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reason for Remote Work</label>
+          <textarea class="form-textarea" id="wfhReason" placeholder="Describe the reason..." required></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="action-btn closeModalBtn" data-modal="wfhModal">Cancel</button>
+          <button type="submit" class="action-btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Submit WFH Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Expense Claim Modal -->
+  <div class="modal-backdrop" id="expenseModal">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-receipt"></i> Submit Expense Claim</h3>
+        <button class="modal-close-btn closeModalBtn" data-modal="expenseModal">&times;</button>
+      </div>
+      <form id="expenseForm">
+        <div class="form-group">
+          <label class="form-label">Expense Category</label>
+          <select class="form-select" id="expCategory" required>
+            <option value="Internet Allowance">Internet & Broadband Allowance</option>
+            <option value="Travel & Fare">Travel & Taxi Fare</option>
+            <option value="Client Meal">Client Entertainment / Meal</option>
+            <option value="Hardware / Office Tech">Hardware / Office Equipment</option>
+          </select>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Expense Date</label>
+            <input type="date" class="form-input" id="expDate" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Amount ($)</label>
+            <input type="number" step="0.01" class="form-input" id="expAmount" placeholder="85.00" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Attach Receipt File</label>
+          <input type="file" class="form-input" id="expReceipt">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="action-btn closeModalBtn" data-modal="expenseModal">Cancel</button>
+          <button type="submit" class="action-btn btn-success"><i class="fa-solid fa-check"></i> Submit Claim</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Official Payslip Viewer Modal -->
+  <div class="modal-backdrop" id="payslipModal">
+    <div class="modal-content glass-card" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-file-invoice-dollar"></i> Official Salary Payslip</h3>
+        <button class="modal-close-btn closeModalBtn" data-modal="payslipModal">&times;</button>
+      </div>
+      <div class="payslip-paper" id="payslipPaperContent">
+        <div style="text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 16px;">
+          <h2>PULSEHR TECHNOLOGIES INC.</h2>
+          <p style="color: #64748b; font-size: 0.8rem;">100 Innovation Way, Suite 500, Tech District</p>
+          <h4 style="margin-top: 8px; color: #3b82f6;" id="psMonthTitle">PAYSLIP FOR JULY 2026</h4>
+        </div>
+        <div class="payslip-header-grid">
+          <div>
+            <div><strong>Employee Name:</strong> <span id="psEmpName">Johnathan Doe</span></div>
+            <div><strong>Employee ID:</strong> <span id="psEmpId">EMP-84920</span></div>
+            <div><strong>Designation:</strong> <span id="psDesignation">Sr. Software Engineer</span></div>
+          </div>
+          <div>
+            <div><strong>Bank Account:</strong> •••• •••• 9841</div>
+            <div><strong>PF Account:</strong> 100984920112</div>
+            <div><strong>Payable Days:</strong> 31 Days</div>
+          </div>
+        </div>
+        <div class="payslip-table-grid">
+          <div>
+            <table class="payslip-table-inner">
+              <thead><tr><th>Earnings</th><th style="text-align: right;">Amount</th></tr></thead>
+              <tbody>
+                <tr><td>Basic Salary</td><td style="text-align: right;">$4,200.00</td></tr>
+                <tr><td>House Rent Allowance (HRA)</td><td style="text-align: right;">$1,800.00</td></tr>
+                <tr><td>Special Allowance</td><td style="text-align: right;">$1,100.00</td></tr>
+                <tr><td>Conveyance Allowance</td><td style="text-align: right;">$300.00</td></tr>
+                <tr><td><strong>Gross Earnings</strong></td><td style="text-align: right;"><strong>$7,400.00</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <table class="payslip-table-inner">
+              <thead><tr><th>Deductions</th><th style="text-align: right;">Amount</th></tr></thead>
+              <tbody>
+                <tr><td>Provident Fund (PF)</td><td style="text-align: right;">$450.00</td></tr>
+                <tr><td>Income Tax (TDS)</td><td style="text-align: right;">$420.00</td></tr>
+                <tr><td>Professional Tax (PT)</td><td style="text-align: right;">$80.00</td></tr>
+                <tr><td>--</td><td style="text-align: right;">--</td></tr>
+                <tr><td><strong>Total Deductions</strong></td><td style="text-align: right;"><strong>$950.00</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="net-pay-box">
+          <div>
+            <div style="font-size: 0.8rem; color: #166534; font-weight: 700;">NET TAKE-HOME SALARY</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: #15803d;" id="psNetPayVal">$6,450.00</div>
+          </div>
+          <button class="action-btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Policy Reader Modal -->
+  <div class="modal-backdrop" id="policyModal">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="policyModalTitle">Policy Details</h3>
+        <button class="modal-close-btn closeModalBtn" data-modal="policyModal">&times;</button>
+      </div>
+      <div class="modal-body" id="policyModalBody" style="line-height: 1.7; font-size: 0.95rem;">
+        Policy text goes here...
+      </div>
+      <div class="modal-actions">
+        <button class="action-btn btn-primary closeModalBtn" data-modal="policyModal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Regularize Modal -->
+  <div class="modal-backdrop" id="regularizeModal">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-wrench"></i> Regularize Attendance</h3>
+        <button class="modal-close-btn closeModalBtn" data-modal="regularizeModal">&times;</button>
+      </div>
+      <form id="regularizeForm">
+        <div class="form-group">
+          <label class="form-label">Select Date</label>
+          <input type="date" class="form-input" id="regDate" required>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Requested Clock In</label>
+            <input type="time" class="form-input" id="regClockIn" value="09:00" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Requested Clock Out</label>
+            <input type="time" class="form-input" id="regClockOut" value="18:00" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reason for Correction</label>
+          <textarea class="form-textarea" id="regReason" placeholder="Explain reason..." required></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="action-btn closeModalBtn" data-modal="regularizeModal">Cancel</button>
+          <button type="submit" class="action-btn btn-primary"><i class="fa-solid fa-check"></i> Submit Correction</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
