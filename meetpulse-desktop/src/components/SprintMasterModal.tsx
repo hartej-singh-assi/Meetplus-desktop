@@ -10,10 +10,12 @@ interface SprintMasterModalProps {
 }
 
 export const SprintMasterModal: React.FC<SprintMasterModalProps> = ({ isOpen, onClose }) => {
-  const { sprints, activeSprint, addSprint, updateSprint, deleteSprint, setActiveSprint } = useMeetingTracker();
+  const { sprints, activeSprint, lastActiveSprint, addSprint, updateSprint, deleteSprint, setActiveSprint } = useMeetingTracker();
 
   const [isEditing, setIsEditing] = useState(false);
   const [editingSprintId, setEditingSprintId] = useState<string | null>(null);
+
+  const todayStr = format(new Date(), 'yyyy-MM-dd');
 
   // Form fields
   const [name, setName] = useState('');
@@ -53,13 +55,19 @@ export const SprintMasterModal: React.FC<SprintMasterModalProps> = ({ isOpen, on
     e.preventDefault();
     if (!name.trim()) return;
 
+    // Auto-normalize status if dates passed
+    let resolvedStatus = status;
+    if (endDate < todayStr) {
+      resolvedStatus = 'COMPLETED';
+    }
+
     if (editingSprintId) {
       updateSprint(editingSprintId, {
         name,
         startDate,
         endDate,
         goal,
-        status,
+        status: resolvedStatus,
       });
     } else {
       addSprint({
@@ -67,7 +75,7 @@ export const SprintMasterModal: React.FC<SprintMasterModalProps> = ({ isOpen, on
         startDate,
         endDate,
         goal,
-        status,
+        status: resolvedStatus,
       });
     }
 
@@ -98,13 +106,13 @@ export const SprintMasterModal: React.FC<SprintMasterModalProps> = ({ isOpen, on
 
         {/* Modal Body */}
         <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
-          {/* Active Sprint Summary Bar */}
-          {activeSprint && (
+          {/* Active or Last Active Sprint Summary Bar */}
+          {activeSprint ? (
             <div className="p-4 bg-indigo-950/30 border border-indigo-500/30 rounded-xl flex items-center justify-between">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-indigo-500 text-white uppercase tracking-wider">
-                    Active Sprint
+                    Active Sprint (Ongoing)
                   </span>
                   <span className="font-bold text-white text-sm">{activeSprint.name}</span>
                 </div>
@@ -121,7 +129,32 @@ export const SprintMasterModal: React.FC<SprintMasterModalProps> = ({ isOpen, on
                 </span>
               </div>
             </div>
-          )}
+          ) : lastActiveSprint ? (
+            <div className="p-4 bg-slate-800/40 border border-slate-700/60 rounded-xl flex items-center justify-between">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-slate-700 text-slate-200 uppercase tracking-wider">
+                    Last Active Cycle (Completed)
+                  </span>
+                  <span className="font-bold text-white text-sm">{lastActiveSprint.name}</span>
+                </div>
+                <p className="text-xs text-slate-400">
+                  Cycle ended on {lastActiveSprint.endDate} ({lastActiveSprint.startDate} → {lastActiveSprint.endDate})
+                </p>
+                {lastActiveSprint.goal && <p className="text-xs text-slate-400 italic">Goal: "{lastActiveSprint.goal}"</p>}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleOpenNew}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all shadow-xs"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Next Sprint</span>
+                </button>
+              </div>
+            </div>
+          ) : null}
 
           {/* Sprints List or Create/Edit Form */}
           {isEditing ? (
@@ -184,7 +217,7 @@ export const SprintMasterModal: React.FC<SprintMasterModalProps> = ({ isOpen, on
                   >
                     <option value="ACTIVE">ACTIVE (Ongoing)</option>
                     <option value="PLANNED">PLANNED (Upcoming)</option>
-                    <option value="COMPLETED">COMPLETED (Past)</option>
+                    <option value="COMPLETED">COMPLETED (Past / Ended)</option>
                   </select>
                 </div>
 
@@ -224,13 +257,16 @@ export const SprintMasterModal: React.FC<SprintMasterModalProps> = ({ isOpen, on
 
               <div className="space-y-2">
                 {sprints.map(sprint => {
-                  const isActive = sprint.id === activeSprint?.id;
+                  const isCurrentActive = sprint.id === activeSprint?.id;
+                  const isLastActive = !activeSprint && sprint.id === lastActiveSprint?.id;
                   return (
                     <div
                       key={sprint.id}
                       className={`p-3.5 rounded-xl border transition-all flex items-center justify-between ${
-                        isActive
+                        isCurrentActive
                           ? 'bg-slate-800/80 border-indigo-500/50 shadow-sm'
+                          : isLastActive
+                          ? 'bg-slate-900/80 border-slate-700/80'
                           : 'bg-slate-950/40 border-slate-800/60 hover:bg-slate-800/20'
                       }`}
                     >
@@ -238,14 +274,16 @@ export const SprintMasterModal: React.FC<SprintMasterModalProps> = ({ isOpen, on
                         <div className="flex items-center gap-2">
                           <span
                             className={`px-2 py-0.5 text-[10px] font-bold rounded ${
-                              sprint.status === 'ACTIVE'
+                              isCurrentActive
                                 ? 'bg-indigo-500 text-white'
+                                : isLastActive
+                                ? 'bg-slate-700 text-slate-200 border border-slate-600'
                                 : sprint.status === 'PLANNED'
                                 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
                                 : 'bg-slate-800 text-slate-400'
                             }`}
                           >
-                            {sprint.status}
+                            {isCurrentActive ? 'ACTIVE' : isLastActive ? 'COMPLETED (Last Active Cycle)' : sprint.status}
                           </span>
                           <span className="font-semibold text-white text-sm">{sprint.name}</span>
                         </div>

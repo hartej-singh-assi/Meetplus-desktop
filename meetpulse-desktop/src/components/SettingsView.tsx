@@ -12,6 +12,7 @@ export const SettingsView: React.FC = () => {
     storageStats,
   } = useMeetingTracker();
 
+  const [trackContextLoss, setTrackContextLoss] = useState<boolean>(settings.trackContextLoss ?? false);
   const [contextLoss, setContextLoss] = useState(settings.defaultContextLossMinutes);
   const [workingHours, setWorkingHours] = useState(settings.workingHoursPerDay);
   const [targetFocus, setTargetFocus] = useState(settings.defaultTargetFocusHours);
@@ -21,13 +22,14 @@ export const SettingsView: React.FC = () => {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     updateSettings({
+      trackContextLoss,
       defaultContextLossMinutes: Number(contextLoss),
       workingHoursPerDay: Number(workingHours),
       defaultTargetFocusHours: Number(targetFocus),
       dataRetentionDays: Number(retentionDays),
       timeFormat,
     });
-    alert('Settings and Time Format preferences saved successfully!');
+    alert('Settings and preferences saved successfully!');
   };
 
   const handleReset = () => {
@@ -103,26 +105,61 @@ export const SettingsView: React.FC = () => {
       <form onSubmit={handleSave} className="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl space-y-5 text-xs">
         <h3 className="font-bold text-sm text-white flex items-center gap-2 border-b border-slate-800 pb-3">
           <Sliders className="w-4 h-4 text-indigo-400" />
-          <span>Productivity Loss & Data Retention Parameters</span>
+          <span>Productivity & Data Retention Parameters</span>
         </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-slate-300 font-semibold mb-1">
-              Default Context Switching Loss Overhead (Minutes)
-            </label>
-            <input
-              type="number"
-              min={0}
-              max={120}
-              value={contextLoss}
-              onChange={e => setContextLoss(Number(e.target.value))}
-              className="w-full bg-slate-950 border border-slate-700 text-rose-400 font-bold p-3 rounded-xl focus:border-rose-500 focus:outline-none"
-            />
-            <p className="text-[11px] text-slate-400 mt-1">
-              Standard focus recovery time lost per meeting disruption (default 15-20m).
+        {/* Context Switching Loss Toggle Card */}
+        <div className="p-4 rounded-xl bg-slate-950/90 border border-slate-800 flex items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2.5">
+              <label htmlFor="context-loss-toggle" className="text-xs font-bold text-white cursor-pointer select-none">
+                Track Context Switching Loss (Recovery Overhead)
+              </label>
+              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${trackContextLoss ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-slate-800 text-slate-400'}`}>
+                {trackContextLoss ? 'ENABLED' : 'DISABLED (HIDDEN)'}
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400">
+              When disabled, all context switching lost time metrics, recovery overhead badges, and loss charts are hidden across the application.
             </p>
           </div>
+
+          <label className="relative inline-flex items-center cursor-pointer shrink-0">
+            <input
+              id="context-loss-toggle"
+              type="checkbox"
+              checked={trackContextLoss}
+              onChange={e => setTrackContextLoss(e.target.checked)}
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-600"></div>
+          </label>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {trackContextLoss ? (
+            <div>
+              <label className="block text-slate-300 font-semibold mb-1">
+                Default Context Switching Loss Overhead (Minutes)
+              </label>
+              <input
+                type="number"
+                min={0}
+                max={120}
+                value={contextLoss}
+                onChange={e => setContextLoss(Number(e.target.value))}
+                className="w-full bg-slate-950 border border-slate-700 text-rose-400 font-bold p-3 rounded-xl focus:border-rose-500 focus:outline-none"
+              />
+              <p className="text-[11px] text-slate-400 mt-1">
+                Standard focus recovery time lost per meeting disruption (default 15-20m).
+              </p>
+            </div>
+          ) : (
+            <div className="opacity-50 pointer-events-none p-3.5 rounded-xl border border-dashed border-slate-800 bg-slate-950/40">
+              <span className="text-slate-400 text-xs font-semibold block">Context Loss Tracking is Disabled</span>
+              <p className="text-[11px] text-slate-500 mt-0.5">Focus is computed solely on direct meeting durations.</p>
+            </div>
+          )}
 
           <div>
             <label className="block text-slate-300 font-semibold mb-1">

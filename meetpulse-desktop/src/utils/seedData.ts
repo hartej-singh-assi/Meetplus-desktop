@@ -8,6 +8,7 @@ export const defaultSettings: UserSettings = {
   autoCalculateLoss: true,
   dataRetentionDays: 0, // Manual / Infinite by default
   timeFormat: '12h',
+  trackContextLoss: false, // Default to false (hidden) as requested
 };
 
 export function generateSeedSprints(): Sprint[] {

@@ -75,6 +75,7 @@ export interface UserSettings {
   autoCalculateLoss: boolean;
   dataRetentionDays: number; // 0 for infinite, or 30, 60, 90, 365
   timeFormat: '12h' | '24h'; // 12-hour (AM/PM) or 24-hour (HH:mm)
+  trackContextLoss: boolean; // Toggle to show/hide context switching loss metrics & overhead
 }
 
 export interface DailyKPISummary {

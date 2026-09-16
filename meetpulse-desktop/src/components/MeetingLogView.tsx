@@ -5,7 +5,7 @@ import { Plus, Trash2, Edit3, Flag } from 'lucide-react';
 import { format } from 'date-fns';
 
 export const MeetingLogView: React.FC = () => {
-  const { meetings, sprints, activeSprint, addMeeting, updateMeeting, deleteMeeting, settings, formatDisplayTime } = useMeetingTracker();
+  const { meetings, sprints, activeSprint, lastActiveSprint, addMeeting, updateMeeting, deleteMeeting, settings, formatDisplayTime } = useMeetingTracker();
 
   // Form & Edit State
   const [showModal, setShowModal] = useState(false);
@@ -25,8 +25,11 @@ export const MeetingLogView: React.FC = () => {
     setEditingMeetingId(null);
     setTitle('');
     setCategory('Sync');
-    setSprintId(activeSprint?.id || (sprints[0]?.id ?? ''));
-    setDate(format(new Date(), 'yyyy-MM-dd'));
+    const todayStr = format(new Date(), 'yyyy-MM-dd');
+    setDate(todayStr);
+    // Auto-detect if today belongs to any sprint
+    const matched = sprints.find(s => s.startDate <= todayStr && todayStr <= s.endDate);
+    setSprintId(matched ? matched.id : '');
     setStartTime('10:00');
     setEndTime('11:00');
     setNotes('');
@@ -37,7 +40,7 @@ export const MeetingLogView: React.FC = () => {
     setEditingMeetingId(m.id);
     setTitle(m.title);
     setCategory(m.category);
-    setSprintId(m.sprintId || activeSprint?.id || '');
+    setSprintId(m.sprintId || '');
     setDate(m.date);
     setStartTime(m.startTime);
     setEndTime(m.endTime);
@@ -45,11 +48,29 @@ export const MeetingLogView: React.FC = () => {
     setShowModal(true);
   };
 
+  const handleDateChange = (newDate: string) => {
+    setDate(newDate);
+    // Auto-detect sprint matching the chosen date
+    const matched = sprints.find(s => s.startDate <= newDate && newDate <= s.endDate);
+    setSprintId(matched ? matched.id : '');
+  };
+
   const calculateDuration = () => {
     try {
       const [sh, sm] = startTime.split(':').map(Number);
       const [eh, em] = endTime.split(':').map(Number);
-      return Math.max(0, eh * 60 + em - (sh * 60 + sm));
+      if (isNaN(sh) || isNaN(sm) || isNaN(eh) || isNaN(em)) return 0;
+      const startMins = sh * 60 + sm;
+      const endMins = eh * 60 + em;
+
+      if (endMins > startMins) {
+        return endMins - startMins;
+      }
+      if (endMins < startMins) {
+        // Overnight meeting crossing midnight into next day (e.g. 21:34 to 03:42 = 368m / 6h 8m)
+        return (24 * 60 - startMins) + endMins;
+      }
+      return 0;
     } catch (e) {
       return 60;
     }
@@ -58,13 +79,16 @@ export const MeetingLogView: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const duration = calculateDuration();
-    if (duration <= 0) return;
+    if (duration <= 0) {
+      alert('Start and end time cannot be identical. Please specify a valid meeting time interval.');
+      return;
+    }
 
     if (editingMeetingId) {
       updateMeeting(editingMeetingId, {
         title: title.trim() || 'Untitled Meeting',
         category,
-        sprintId,
+        sprintId: sprintId || undefined,
         date,
         startTime,
         endTime,
@@ -75,16 +99,16 @@ export const MeetingLogView: React.FC = () => {
       addMeeting({
         title: title.trim() || 'Untitled Meeting',
         category,
-        sprintId: sprintId || activeSprint?.id,
+        sprintId: sprintId || undefined,
         date,
         startTime,
         endTime,
         durationMinutes: duration,
-        contextSwitchLossMinutes: settings.defaultContextLossMinutes,
-        impactLevel: duration > 45 ? 'HIGH' : 'MEDIUM',
+        contextSwitchLossMinutes: settings.trackContextLoss ? settings.defaultContextLossMinutes : 0,
+        impactLevel: duration > 120 ? 'HIGH' : duration > 45 ? 'HIGH' : 'MEDIUM',
         participantsCount: 2,
         notes: notes.trim(),
-        targetDisruptionScore: 5,
+        targetDisruptionScore: duration > 180 ? 9 : 5,
       });
     }
 
@@ -101,7 +125,8 @@ export const MeetingLogView: React.FC = () => {
 
   const filteredMeetings = meetings.filter(m => {
     if (selectedSprintFilter === 'ALL') return true;
-    return (m.sprintId || activeSprint?.id) === selectedSprintFilter;
+    if (selectedSprintFilter === 'NO_SPRINT') return !m.sprintId;
+    return m.sprintId === selectedSprintFilter;
   });
 
   return (
@@ -123,11 +148,17 @@ export const MeetingLogView: React.FC = () => {
               className="bg-transparent text-slate-200 focus:outline-none cursor-pointer font-medium"
             >
               <option value="ALL" className="bg-slate-900">All Sprints</option>
-              {sprints.map(s => (
-                <option key={s.id} value={s.id} className="bg-slate-900">
-                  {s.name} {s.status === 'ACTIVE' ? '(Active)' : ''}
-                </option>
-              ))}
+              <option value="NO_SPRINT" className="bg-slate-900">No Sprint / Unassigned</option>
+              {sprints.map(s => {
+                const isCurrent = s.id === activeSprint?.id;
+                const isLast = !activeSprint && s.id === lastActiveSprint?.id;
+                const tag = isCurrent ? ' (Active)' : isLast ? ' (Last Active)' : '';
+                return (
+                  <option key={s.id} value={s.id} className="bg-slate-900">
+                    {s.name}{tag}
+                  </option>
+                );
+              })}
             </select>
           </div>
 
@@ -163,10 +194,10 @@ export const MeetingLogView: React.FC = () => {
               </tr>
             ) : (
               filteredMeetings.map(m => {
-                const linkedSprint = sprints.find(s => s.id === m.sprintId) || activeSprint;
+                const linkedSprint = m.sprintId ? sprints.find(s => s.id === m.sprintId) : null;
                 const sprintDisplayName = linkedSprint
                   ? (linkedSprint.name.includes(' - ') ? linkedSprint.name.split(' - ')[0] : linkedSprint.name)
-                  : 'Sprint';
+                  : null;
 
                 return (
                   <tr key={m.id} className="hover:bg-slate-800/30 transition-all">
@@ -175,10 +206,16 @@ export const MeetingLogView: React.FC = () => {
                       {m.notes && <div className="text-xs text-slate-400 font-normal mt-1 leading-relaxed">{m.notes}</div>}
                     </td>
                     <td className="p-4 whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 whitespace-nowrap">
-                        <Flag className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                        <span>{sprintDisplayName}</span>
-                      </span>
+                      {sprintDisplayName ? (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 whitespace-nowrap">
+                          <Flag className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                          <span>{sprintDisplayName}</span>
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-medium text-slate-500 bg-slate-950/60 border border-slate-800/80 whitespace-nowrap">
+                          No Sprint
+                        </span>
+                      )}
                     </td>
                     <td className="p-4 whitespace-nowrap">
                       <span className="px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700/60">
@@ -249,11 +286,17 @@ export const MeetingLogView: React.FC = () => {
                   onChange={e => setSprintId(e.target.value)}
                   className="w-full bg-slate-950 border border-slate-800 text-white p-3 rounded-xl focus:outline-none focus:border-indigo-500 font-medium"
                 >
-                  {sprints.map(s => (
-                    <option key={s.id} value={s.id}>
-                      {s.name} ({s.status})
-                    </option>
-                  ))}
+                  <option value="">None (No Sprint / Between Sprints)</option>
+                  {sprints.map(s => {
+                    const isOngoing = s.id === activeSprint?.id;
+                    const isLast = !activeSprint && s.id === lastActiveSprint?.id;
+                    const tag = isOngoing ? 'Active' : isLast ? 'Last Active' : s.status;
+                    return (
+                      <option key={s.id} value={s.id}>
+                        {s.name} ({tag})
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 
@@ -278,7 +321,7 @@ export const MeetingLogView: React.FC = () => {
                   <input
                     type="date"
                     value={date}
-                    onChange={e => setDate(e.target.value)}
+                    onChange={e => handleDateChange(e.target.value)}
                     className="w-full bg-slate-950 border border-slate-800 text-white p-3 rounded-xl focus:outline-none font-medium"
                   />
                 </div>
@@ -303,6 +346,32 @@ export const MeetingLogView: React.FC = () => {
                     className="w-full bg-slate-950 border border-slate-800 text-white p-3 rounded-xl focus:outline-none font-medium"
                   />
                 </div>
+              </div>
+
+              {/* Calculated Duration Live Badge */}
+              <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 flex items-center justify-between text-xs">
+                <span className="text-slate-400 font-medium">Calculated Duration:</span>
+                {(() => {
+                  const dur = calculateDuration();
+                  const [sh, sm] = startTime.split(':').map(Number);
+                  const [eh, em] = endTime.split(':').map(Number);
+                  const isOvernight = (eh * 60 + em) < (sh * 60 + sm);
+
+                  if (dur <= 0) {
+                    return <span className="text-rose-400 font-semibold">0m (identical start & end)</span>;
+                  }
+
+                  return (
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-bold text-indigo-300 text-sm">{formatMeetingTime(dur)}</span>
+                      {isOvernight && (
+                        <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                          Overnight / Crosses Midnight (+1 Day)
+                        </span>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
 
               <div>

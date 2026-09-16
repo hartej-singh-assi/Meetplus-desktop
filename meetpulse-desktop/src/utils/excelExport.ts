@@ -1,5 +1,5 @@
 import * as XLSX from 'xlsx';
-import { MeetingRecord, WorkRecord, ExportConfig, DailyKPISummary } from '../types';
+import { MeetingRecord, WorkRecord, ExportConfig, DailyKPISummary, Sprint } from '../types';
 import { format, parseISO, isWithinInterval } from 'date-fns';
 
 export function filterRecordsByDateRange<T extends { date: string }>(
@@ -48,7 +48,9 @@ export function exportRecordsToFormat(
   meetings: MeetingRecord[],
   workLogs: WorkRecord[],
   summaries: DailyKPISummary[],
-  config: ExportConfig
+  config: ExportConfig,
+  sprints: Sprint[] = [],
+  trackContextLoss: boolean = true
 ) {
   const filteredMeetings = filterRecordsByDateRange(meetings, config);
   const filteredWorkLogs = filterRecordsByDateRange(workLogs, config);
@@ -58,17 +60,22 @@ export function exportRecordsToFormat(
 
   // 1. Executive Summary Sheet
   if (config.includeSummary) {
-    const summaryData = filteredSummaries.map(s => ({
-      'Date': s.date,
-      'Total Meetings': s.totalMeetingsCount,
-      'Direct Meeting Time (Hrs)': s.totalDirectMeetingHours,
-      'Time Lost / Context Overhead (Hrs)': s.totalTimeLostHours,
-      'Total Meeting Impact (Hrs)': s.totalMeetingImpactHours,
-      'Target Focus Target (Hrs)': s.targetFocusHours,
-      'Actual Focus Achieved (Hrs)': s.actualWorkHours,
-      'Target Achievement %': `${s.targetAchievementPercentage}%`,
-      'Productivity Disruption Index': `${s.disruptionIndex}/100`,
-    }));
+    const summaryData = filteredSummaries.map(s => {
+      const row: Record<string, any> = {
+        'Date': s.date,
+        'Total Meetings': s.totalMeetingsCount,
+        'Direct Meeting Time (Hrs)': s.totalDirectMeetingHours,
+      };
+      if (trackContextLoss) {
+        row['Time Lost / Context Overhead (Hrs)'] = s.totalTimeLostHours;
+        row['Total Meeting Impact (Hrs)'] = s.totalMeetingImpactHours;
+      }
+      row['Target Focus Target (Hrs)'] = s.targetFocusHours;
+      row['Actual Focus Achieved (Hrs)'] = s.actualWorkHours;
+      row['Target Achievement %'] = `${s.targetAchievementPercentage}%`;
+      row['Productivity Disruption Index'] = `${s.disruptionIndex}/100`;
+      return row;
+    });
 
     const summarySheet = XLSX.utils.json_to_sheet(
       summaryData.length > 0 ? summaryData : [{ 'Status': 'No records found for selected range' }]
@@ -85,29 +92,36 @@ export function exportRecordsToFormat(
 
   // 2. Detailed Meetings Sheet
   if (config.includeMeetingLogs) {
-    const meetingData = filteredMeetings.map(m => ({
-      'ID': m.id,
-      'Date': m.date,
-      'Meeting Title': m.title,
-      'Category': m.category,
-      'Start Time': m.startTime,
-      'End Time': m.endTime,
-      'Direct Duration (Mins)': m.durationMinutes,
-      'Direct Duration (Hrs)': (m.durationMinutes / 60).toFixed(2),
-      'Context Loss Overhead (Mins)': m.contextSwitchLossMinutes,
-      'Total Focus Time Lost (Mins)': m.totalImpactMinutes,
-      'Target Impact Rating': m.impactLevel,
-      'Target Disruption Score (1-10)': m.targetDisruptionScore,
-      'Participants': m.participantsCount,
-      'Notes & Agenda': m.notes,
-    }));
+    const meetingData = filteredMeetings.map(m => {
+      const sprintObj = m.sprintId ? sprints.find(s => s.id === m.sprintId) : null;
+      const row: Record<string, any> = {
+        'ID': m.id,
+        'Date': m.date,
+        'Sprint': sprintObj ? sprintObj.name : 'No Sprint / Unassigned',
+        'Meeting Title': m.title,
+        'Category': m.category,
+        'Start Time': m.startTime,
+        'End Time': m.endTime,
+        'Direct Duration (Mins)': m.durationMinutes,
+        'Direct Duration (Hrs)': (m.durationMinutes / 60).toFixed(2),
+      };
+      if (trackContextLoss) {
+        row['Context Loss Overhead (Mins)'] = m.contextSwitchLossMinutes;
+        row['Total Focus Time Lost (Mins)'] = m.totalImpactMinutes;
+      }
+      row['Target Impact Rating'] = m.impactLevel;
+      row['Target Disruption Score (1-10)'] = m.targetDisruptionScore;
+      row['Participants'] = m.participantsCount;
+      row['Notes & Agenda'] = m.notes;
+      return row;
+    });
 
     const meetingSheet = XLSX.utils.json_to_sheet(
       meetingData.length > 0 ? meetingData : [{ 'Status': 'No meeting records' }]
     );
 
     meetingSheet['!cols'] = [
-      { wch: 12 }, { wch: 12 }, { wch: 32 }, { wch: 14 },
+      { wch: 12 }, { wch: 12 }, { wch: 24 }, { wch: 32 }, { wch: 14 },
       { wch: 12 }, { wch: 12 }, { wch: 22 }, { wch: 20 },
       { wch: 25 }, { wch: 25 }, { wch: 20 }, { wch: 26 },
       { wch: 14 }, { wch: 45 }

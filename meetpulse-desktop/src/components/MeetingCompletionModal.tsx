@@ -53,7 +53,7 @@ export const MeetingCompletionModal: React.FC = () => {
       startTime: pendingCompletionMeeting.startTimeStr,
       endTime: pendingCompletionMeeting.endTimeStr,
       durationMinutes: pendingCompletionMeeting.durationMinutes,
-      contextSwitchLossMinutes: contextLoss,
+      contextSwitchLossMinutes: settings.trackContextLoss ? contextLoss : 0,
       impactLevel,
       participantsCount,
       notes,
@@ -165,21 +165,23 @@ export const MeetingCompletionModal: React.FC = () => {
           </div>
 
           {/* Context Loss & Participants Row */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center justify-between">
-                <span>Context Loss (Overhead)</span>
-                <span className="text-[10px] text-rose-400 font-normal">+{contextLoss} mins</span>
-              </label>
-              <input
-                type="number"
-                min="0"
-                max="120"
-                value={contextLoss}
-                onChange={e => setContextLoss(parseInt(e.target.value, 10) || 0)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-indigo-500 font-medium transition-colors"
-              />
-            </div>
+          <div className={`grid ${settings.trackContextLoss ? 'grid-cols-2' : 'grid-cols-1'} gap-4`}>
+            {settings.trackContextLoss && (
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-300 flex items-center justify-between">
+                  <span>Context Loss (Overhead)</span>
+                  <span className="text-[10px] text-rose-400 font-normal">+{contextLoss} mins</span>
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  max="120"
+                  value={contextLoss}
+                  onChange={e => setContextLoss(parseInt(e.target.value, 10) || 0)}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-indigo-500 font-medium transition-colors"
+                />
+              </div>
+            )}
 
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-300">Participants Count</label>

@@ -50,20 +50,34 @@ export const DashboardView: React.FC = () => {
   const todayMeetings = meetings.filter(m => m.date === todayStr);
 
   // Donut Chart Data
-  const doughnutData = {
-    labels: ['Deep Work', 'Meetings', 'Context Loss'],
-    datasets: [
-      {
-        data: [
-          todaySummary.availableFocusHours,
-          todaySummary.totalDirectMeetingHours,
-          todaySummary.totalTimeLostHours,
+  const doughnutData = settings.trackContextLoss
+    ? {
+        labels: ['Deep Work', 'Meetings', 'Context Loss'],
+        datasets: [
+          {
+            data: [
+              todaySummary.availableFocusHours,
+              todaySummary.totalDirectMeetingHours,
+              todaySummary.totalTimeLostHours,
+            ],
+            backgroundColor: ['#10b981', '#6366f1', '#f43f5e'],
+            borderWidth: 0,
+          },
         ],
-        backgroundColor: ['#10b981', '#6366f1', '#f43f5e'],
-        borderWidth: 0,
-      },
-    ],
-  };
+      }
+    : {
+        labels: ['Available Deep Work', 'Direct Meetings'],
+        datasets: [
+          {
+            data: [
+              todaySummary.availableFocusHours,
+              todaySummary.totalDirectMeetingHours,
+            ],
+            backgroundColor: ['#10b981', '#6366f1'],
+            borderWidth: 0,
+          },
+        ],
+      };
 
   const doughnutOptions = {
     responsive: true,
@@ -83,17 +97,21 @@ export const DashboardView: React.FC = () => {
     labels: last7Days.map(d => format(new Date(d.date), 'EEE')),
     datasets: [
       {
-        label: 'Meeting',
+        label: 'Direct Meeting',
         data: last7Days.map(d => d.totalDirectMeetingHours),
         backgroundColor: '#6366f1',
         borderRadius: 4,
       },
-      {
-        label: 'Loss Overhead',
-        data: last7Days.map(d => d.totalTimeLostHours),
-        backgroundColor: '#f43f5e',
-        borderRadius: 4,
-      },
+      ...(settings.trackContextLoss
+        ? [
+            {
+              label: 'Loss Overhead',
+              data: last7Days.map(d => d.totalTimeLostHours),
+              backgroundColor: '#f43f5e',
+              borderRadius: 4,
+            },
+          ]
+        : []),
       {
         label: 'Work Done',
         data: last7Days.map(d => d.actualWorkHours),
@@ -124,7 +142,9 @@ export const DashboardView: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-800/60 shrink-0">
         <div>
           <h2 className="text-xl font-bold text-white tracking-tight">Today's Overview</h2>
-          <p className="text-xs text-slate-400">Direct meeting time vs focus recovery overhead</p>
+          <p className="text-xs text-slate-400">
+            {settings.trackContextLoss ? 'Direct meeting time vs focus recovery overhead' : 'Direct meeting time and focus availability'}
+          </p>
         </div>
 
         {/* Minimal Timer */}
@@ -183,7 +203,7 @@ export const DashboardView: React.FC = () => {
 
 
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className={`grid grid-cols-1 sm:grid-cols-2 ${settings.trackContextLoss ? 'xl:grid-cols-4' : 'xl:grid-cols-3'} gap-4`}>
         <div className="bg-slate-900/60 border border-slate-800/80 p-5 rounded-2xl shadow-sm">
           <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Direct Meetings</div>
           <div className="text-3xl font-bold text-white mt-1">
@@ -192,13 +212,15 @@ export const DashboardView: React.FC = () => {
           <div className="text-xs text-slate-500 mt-1.5">{todaySummary.totalMeetingsCount} sessions logged</div>
         </div>
 
-        <div className="bg-slate-900/60 border border-rose-500/20 p-5 rounded-2xl shadow-sm">
-          <div className="text-xs text-rose-400 font-semibold uppercase tracking-wider">Time Lost (Overhead)</div>
-          <div className="text-3xl font-bold text-rose-400 mt-1">
-            {todaySummary.totalTimeLostHours} <span className="text-xs text-rose-300/60 font-normal">hrs</span>
+        {settings.trackContextLoss && (
+          <div className="bg-slate-900/60 border border-rose-500/20 p-5 rounded-2xl shadow-sm">
+            <div className="text-xs text-rose-400 font-semibold uppercase tracking-wider">Time Lost (Overhead)</div>
+            <div className="text-3xl font-bold text-rose-400 mt-1">
+              {todaySummary.totalTimeLostHours} <span className="text-xs text-rose-300/60 font-normal">hrs</span>
+            </div>
+            <div className="text-xs text-slate-500 mt-1.5">Context switching penalty</div>
           </div>
-          <div className="text-xs text-slate-500 mt-1.5">Context switching penalty</div>
-        </div>
+        )}
 
         <div className="bg-slate-900/60 border border-slate-800/80 p-5 rounded-2xl shadow-sm">
           <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Available Focus</div>
@@ -269,7 +291,9 @@ export const DashboardView: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <div className="font-semibold text-slate-300 text-sm">{m.durationMinutes}m duration</div>
-                  <div className="text-xs text-rose-400 font-medium">+{m.contextSwitchLossMinutes}m lost</div>
+                  {settings.trackContextLoss && (
+                    <div className="text-xs text-rose-400 font-medium">+{m.contextSwitchLossMinutes}m lost</div>
+                  )}
                 </div>
               </div>
             ))}

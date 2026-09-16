@@ -17,6 +17,7 @@ interface MeetingTrackerContextType {
   workLogs: WorkRecord[];
   sprints: Sprint[];
   activeSprint: Sprint | null;
+  lastActiveSprint: Sprint | null;
   settings: UserSettings;
   activeTab: TabType;
   setActiveTab: (tab: TabType) => void;
@@ -83,7 +84,16 @@ const sendWindowMode = (mode: 'mini-pill' | 'normal') => {
 };
 
 export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [activeTab, setActiveTab] = useState<TabType>('dashboard');
+  const [activeTab, setActiveTabState] = useState<TabType>(() => {
+    return (localStorage.getItem('meetpulse_active_tab') as TabType) || 'calendar';
+  });
+
+  const setActiveTab = (tab: TabType) => {
+    setActiveTabState(tab);
+    try {
+      localStorage.setItem('meetpulse_active_tab', tab);
+    } catch (e) {}
+  };
 
   // Spontaneous Timer State
   const [timerRunning, setTimerRunning] = useState(false);
@@ -162,33 +172,85 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  // Sprints state
+  // Helper: Normalize sprint status based on today's date
+  const normalizeSprints = (rawSprints: Sprint[], today: string): Sprint[] => {
+    return rawSprints.map(s => {
+      // If sprint date has passed (endDate < today), automatically mark as COMPLETED
+      if (s.endDate < today && s.status === 'ACTIVE') {
+        return { ...s, status: 'COMPLETED' as SprintStatus };
+      }
+      return s;
+    });
+  };
+
+  // Helper: Automatically map meetings to sprints based on strict date ranges [startDate, endDate]
+  const mapMeetingsToSprints = (meetingsList: MeetingRecord[], sprintsList: Sprint[]): MeetingRecord[] => {
+    return meetingsList.map(m => {
+      // Find sprint that contains m.date
+      const matchingSprint = sprintsList.find(s => s.startDate <= m.date && m.date <= s.endDate);
+      const resolvedSprintId = matchingSprint ? matchingSprint.id : undefined;
+      if (m.sprintId !== resolvedSprintId) {
+        return { ...m, sprintId: resolvedSprintId };
+      }
+      return m;
+    });
+  };
+
+  const todayStr = format(new Date(), 'yyyy-MM-dd');
+
+  // Sprints state initialized and normalized
   const [sprints, setSprints] = useState<Sprint[]>(() => {
     const saved = localStorage.getItem(LOCAL_STORAGE_KEY_SPRINTS);
-    if (saved) {
-      try { return JSON.parse(saved); } catch (e) { console.error(e); }
-    }
-    return generateSeedSprints();
+    const list: Sprint[] = saved ? (() => {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+        return generateSeedSprints();
+      }
+    })() : generateSeedSprints();
+    return normalizeSprints(list, format(new Date(), 'yyyy-MM-dd'));
   });
 
-  // Active Sprint resolution
+  // Active Sprint resolution: ongoing sprint that strictly includes today
   const activeSprint = useMemo(() => {
-    const active = sprints.find(s => s.status === 'ACTIVE');
-    if (active) return active;
-    const todayStr = format(new Date(), 'yyyy-MM-dd');
-    const matchingToday = sprints.find(s => s.startDate <= todayStr && todayStr <= s.endDate);
-    return matchingToday || sprints[0] || null;
-  }, [sprints]);
+    const ongoing = sprints.find(s => s.startDate <= todayStr && todayStr <= s.endDate);
+    return ongoing || null;
+  }, [sprints, todayStr]);
 
-  // Load meetings & work logs from local storage or seed
+  // Last Active Sprint resolution: most recent sprint whose cycle ended before today
+  const lastActiveSprint = useMemo(() => {
+    const pastSprints = sprints
+      .filter(s => s.endDate < todayStr)
+      .sort((a, b) => b.endDate.localeCompare(a.endDate));
+    return pastSprints[0] || null;
+  }, [sprints, todayStr]);
+
+  // Load meetings & work logs from local storage or seed, auto-mapping meetings to sprints by date
   const [meetings, setMeetings] = useState<MeetingRecord[]>(() => {
     const saved = localStorage.getItem(LOCAL_STORAGE_KEY_MEETINGS);
+    let initialMeetings: MeetingRecord[];
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) { console.error(e); }
+      try {
+        initialMeetings = JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+        initialMeetings = generateSeedData().meetings;
+      }
+    } else {
+      initialMeetings = generateSeedData().meetings;
     }
-    const seed = generateSeedData();
-    return seed.meetings;
+    return mapMeetingsToSprints(initialMeetings, sprints);
   });
+
+  // Automatically keep all meetings synchronized with sprints whenever sprints are added, updated, or deleted
+  useEffect(() => {
+    setMeetings(prev => {
+      const remapped = mapMeetingsToSprints(prev, sprints);
+      const isChanged = remapped.some((m, idx) => m.sprintId !== prev[idx]?.sprintId);
+      return isChanged ? remapped : prev;
+    });
+  }, [sprints]);
 
   const [workLogs, setWorkLogs] = useState<WorkRecord[]>(() => {
     const saved = localStorage.getItem(LOCAL_STORAGE_KEY_WORK);
@@ -202,7 +264,16 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
   const [settings, setSettings] = useState<UserSettings>(() => {
     const saved = localStorage.getItem(LOCAL_STORAGE_KEY_SETTINGS);
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) { console.error(e); }
+      try {
+        const parsed = JSON.parse(saved);
+        return {
+          ...defaultSettings,
+          ...parsed,
+          trackContextLoss: parsed.trackContextLoss ?? false,
+        };
+      } catch (e) {
+        console.error(e);
+      }
     }
     return defaultSettings;
   });
@@ -225,34 +296,52 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
   }, [settings]);
 
   const addSprint = (sprintInput: Omit<Sprint, 'id'>) => {
+    const today = format(new Date(), 'yyyy-MM-dd');
+    let resolvedStatus: SprintStatus = sprintInput.status;
+    // If the sprint endDate has already passed, automatically mark it COMPLETED
+    if (sprintInput.endDate < today) {
+      resolvedStatus = 'COMPLETED';
+    } else if (sprintInput.startDate <= today && today <= sprintInput.endDate && sprintInput.status === 'ACTIVE') {
+      resolvedStatus = 'ACTIVE';
+    }
+
     const newSprint: Sprint = {
       ...sprintInput,
+      status: resolvedStatus,
       id: `sprint-${Date.now()}`,
     };
-    // If new sprint is active, mark others completed/planned
-    if (newSprint.status === 'ACTIVE') {
-      setSprints(prev =>
-        prev
+
+    setSprints(prev => {
+      let updated: Sprint[];
+      if (newSprint.status === 'ACTIVE') {
+        updated = prev
           .map(s => (s.status === 'ACTIVE' ? ({ ...s, status: 'COMPLETED' as SprintStatus }) : s))
-          .concat(newSprint)
-      );
-    } else {
-      setSprints(prev => [newSprint, ...prev]);
-    }
+          .concat(newSprint);
+      } else {
+        updated = [newSprint, ...prev];
+      }
+      return normalizeSprints(updated, today);
+    });
   };
 
   const updateSprint = (id: string, updated: Partial<Sprint>) => {
-    setSprints(prev =>
-      prev.map(s => {
+    const today = format(new Date(), 'yyyy-MM-dd');
+    setSprints(prev => {
+      const updatedList = prev.map(s => {
         if (s.id === id) {
-          return { ...s, ...updated };
+          const merged = { ...s, ...updated };
+          if (merged.endDate < today && merged.status === 'ACTIVE') {
+            merged.status = 'COMPLETED';
+          }
+          return merged;
         }
         if (updated.status === 'ACTIVE' && s.id !== id && s.status === 'ACTIVE') {
           return { ...s, status: 'COMPLETED' as SprintStatus };
         }
         return s;
-      })
-    );
+      });
+      return normalizeSprints(updatedList, today);
+    });
   };
 
   const deleteSprint = (id: string) => {
@@ -270,11 +359,16 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
 
   const addMeeting = (meetingInput: Omit<MeetingRecord, 'id' | 'totalImpactMinutes'>) => {
     const totalImpact = meetingInput.durationMinutes + meetingInput.contextSwitchLossMinutes;
-    // Auto-link sprintId if not specified
-    const linkedSprintId = meetingInput.sprintId || activeSprint?.id;
+    // Auto-resolve sprintId strictly from meeting date if not explicitly specified
+    let resolvedSprintId = meetingInput.sprintId;
+    if (!resolvedSprintId) {
+      const matched = sprints.find(s => s.startDate <= meetingInput.date && meetingInput.date <= s.endDate);
+      resolvedSprintId = matched ? matched.id : undefined;
+    }
+
     const newMeeting: MeetingRecord = {
       ...meetingInput,
-      sprintId: linkedSprintId,
+      sprintId: resolvedSprintId || undefined,
       id: `m-${Date.now()}`,
       totalImpactMinutes: totalImpact,
     };
@@ -290,6 +384,11 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
       prev.map(m => {
         if (m.id === id) {
           const merged = { ...m, ...updated };
+          // If date changed and sprintId wasn't explicitly changed, re-evaluate matching sprint by date
+          if (updated.date && updated.sprintId === undefined) {
+            const matched = sprints.find(s => s.startDate <= merged.date && merged.date <= s.endDate);
+            merged.sprintId = matched ? matched.id : undefined;
+          }
           merged.totalImpactMinutes = merged.durationMinutes + merged.contextSwitchLossMinutes;
           return merged;
         }
@@ -355,7 +454,9 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
 
       const totalMeetingsCount = dayMeetings.length;
       const totalDirectMinutes = dayMeetings.reduce((acc, m) => acc + m.durationMinutes, 0);
-      const totalLostMinutes = dayMeetings.reduce((acc, m) => acc + m.contextSwitchLossMinutes, 0);
+      const totalLostMinutes = settings.trackContextLoss
+        ? dayMeetings.reduce((acc, m) => acc + (m.contextSwitchLossMinutes || 0), 0)
+        : 0;
       const totalImpactMinutes = totalDirectMinutes + totalLostMinutes;
 
       const totalDirectMeetingHours = Number((totalDirectMinutes / 60).toFixed(2));
@@ -390,7 +491,6 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
     });
   }, [meetings, workLogs, settings]);
 
-  const todayStr = format(new Date(), 'yyyy-MM-dd');
   const todaySummary = useMemo(() => {
     return (
       dailySummaries.find(s => s.date === todayStr) || {
@@ -451,7 +551,7 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
   };
 
   const triggerExport = (config: ExportConfig) => {
-    exportRecordsToFormat(meetings, workLogs, dailySummaries, config);
+    exportRecordsToFormat(meetings, workLogs, dailySummaries, config, sprints, settings.trackContextLoss);
   };
 
   return (
@@ -461,6 +561,7 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
         workLogs,
         sprints,
         activeSprint,
+        lastActiveSprint,
         settings,
         activeTab,
         setActiveTab,

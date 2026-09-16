@@ -20,6 +20,8 @@ export const DesktopTitlebar: React.FC<DesktopTitlebarProps> = ({
     setActiveTab,
     todaySummary,
     activeSprint,
+    lastActiveSprint,
+    settings,
     timerRunning,
     timerSeconds,
     formatTimerDisplay,
@@ -74,14 +76,26 @@ export const DesktopTitlebar: React.FC<DesktopTitlebarProps> = ({
 
       {/* Right Quick Stats & Actions */}
       <div className="flex items-center gap-4">
-        {/* Active Sprint Pill */}
+        {/* Active Sprint or Last Active Cycle Pill */}
         <button
           onClick={onOpenSprintModal}
-          className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-xs font-semibold transition-all whitespace-nowrap shrink-0"
+          className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold transition-all whitespace-nowrap shrink-0 ${
+            activeSprint
+              ? 'bg-indigo-500/10 hover:bg-indigo-500/20 border-indigo-500/30 text-indigo-300'
+              : lastActiveSprint
+              ? 'bg-slate-800/80 hover:bg-slate-700/80 border-slate-700/80 text-slate-300'
+              : 'bg-slate-800/50 hover:bg-slate-800 border-slate-700/50 text-slate-400'
+          }`}
           title="Open Sprint Master Timeline"
         >
-          <Flag className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-          <span className="whitespace-nowrap">{activeSprint ? (activeSprint.name.includes(' - ') ? activeSprint.name.split(' - ')[0] : activeSprint.name) : 'Sprint Master'}</span>
+          <Flag className={`w-3.5 h-3.5 shrink-0 ${activeSprint ? 'text-indigo-400' : 'text-slate-400'}`} />
+          <span className="whitespace-nowrap">
+            {activeSprint
+              ? (activeSprint.name.includes(' - ') ? activeSprint.name.split(' - ')[0] : activeSprint.name)
+              : lastActiveSprint
+              ? `Last: ${lastActiveSprint.name.includes(' - ') ? lastActiveSprint.name.split(' - ')[0] : lastActiveSprint.name}`
+              : 'Sprint Master'}
+          </span>
         </button>
 
         {/* Active Live Timer Badge if Running */}
@@ -98,10 +112,14 @@ export const DesktopTitlebar: React.FC<DesktopTitlebarProps> = ({
 
         <div className="text-xs text-slate-400 font-medium hidden md:flex items-center gap-3">
           <span>{todayFormatted}</span>
-          <span className="w-1 h-1 rounded-full bg-slate-700"></span>
-          <span className="text-slate-300">
-            Lost Time: <strong className="text-rose-400 font-semibold">{todaySummary.totalTimeLostHours}h</strong>
-          </span>
+          {settings.trackContextLoss && (
+            <>
+              <span className="w-1 h-1 rounded-full bg-slate-700"></span>
+              <span className="text-slate-300">
+                Lost Time: <strong className="text-rose-400 font-semibold">{todaySummary.totalTimeLostHours}h</strong>
+              </span>
+            </>
+          )}
         </div>
 
         <div className="flex items-center gap-2">
