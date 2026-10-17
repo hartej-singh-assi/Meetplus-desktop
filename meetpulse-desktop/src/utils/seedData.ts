@@ -9,6 +9,13 @@ export const defaultSettings: UserSettings = {
   dataRetentionDays: 0, // Manual / Infinite by default
   timeFormat: '12h',
   trackContextLoss: false, // Default to false (hidden) as requested
+  trackDeepWorkFocus: true, // Default to true (enabled)
+  enableShiftTracking: true, // Default to true (enabled)
+  shiftStartTime: '09:30', // Standard shift start 9:30 AM
+  shiftEndTime: '18:30', // Standard shift end 6:30 PM (9.0h shift)
+  enableLunchBreak: true, // Deduct lunch break from shift working hours
+  lunchStartTime: '13:00', // Standard lunch start 1:00 PM
+  lunchEndTime: '14:00', // Standard lunch end 2:00 PM (1.0h break)
 };
 
 export function generateSeedSprints(): Sprint[] {

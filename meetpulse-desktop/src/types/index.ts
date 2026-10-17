@@ -35,6 +35,9 @@ export interface MeetingRecord {
   participantsCount: number;
   notes: string;
   targetDisruptionScore: number; // 1 to 10 rating
+  inShiftMinutes?: number; // Minutes falling within work shift hours
+  overtimeMinutes?: number; // Minutes falling outside work shift / overtime (strictly excluding lunch)
+  lunchMinutes?: number; // Minutes falling during lunch break
 }
 
 export interface TaskItem {
@@ -76,6 +79,13 @@ export interface UserSettings {
   dataRetentionDays: number; // 0 for infinite, or 30, 60, 90, 365
   timeFormat: '12h' | '24h'; // 12-hour (AM/PM) or 24-hour (HH:mm)
   trackContextLoss: boolean; // Toggle to show/hide context switching loss metrics & overhead
+  trackDeepWorkFocus: boolean; // Toggle to show/hide Deep Work Focus metrics & available bandwidth
+  enableShiftTracking: boolean; // Toggle to calculate in-shift vs overtime/non-working hour meetings
+  shiftStartTime: string; // Shift start time in HH:mm (e.g. "09:30")
+  shiftEndTime: string; // Shift end time in HH:mm (e.g. "18:30")
+  enableLunchBreak?: boolean; // Toggle lunch break deduction from shift working hours
+  lunchStartTime?: string; // Lunch start time in HH:mm (e.g. "13:00")
+  lunchEndTime?: string; // Lunch end time in HH:mm (e.g. "14:00")
 }
 
 export interface DailyKPISummary {
@@ -89,6 +99,29 @@ export interface DailyKPISummary {
   targetFocusHours: number;
   targetAchievementPercentage: number;
   disruptionIndex: number; // 0-100 scale of productivity friction
+  inShiftMeetingHours: number; // Direct meeting hours within official shift
+  overtimeMeetingHours: number; // Direct meeting hours outside shift / overtime (strictly excluding lunch)
+  lunchMeetingHours?: number; // Direct meeting hours during lunch break
 }
 
 export type TabType = 'dashboard' | 'calendar' | 'meetings' | 'work' | 'records' | 'settings';
+
+export interface AppBackupData {
+  version: string;
+  exportTimestamp: string;
+  appName?: string;
+  meetings: MeetingRecord[];
+  workLogs: WorkRecord[];
+  sprints: Sprint[];
+  settings?: UserSettings;
+  activeTab?: TabType;
+}
+
+export interface ImportResult {
+  success: boolean;
+  message: string;
+  importedMeetings: number;
+  importedSprints: number;
+  importedWorkLogs: number;
+  updatedSettings: boolean;
+}

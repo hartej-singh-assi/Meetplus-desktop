@@ -18,7 +18,7 @@ import {
   isSameDay,
   isToday,
 } from 'date-fns';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, Plus, Edit3 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, Plus, Edit3, Moon } from 'lucide-react';
 
 interface CalendarViewProps {
   onOpenNewMeetingWithDate?: (dateStr: string) => void;
@@ -31,19 +31,10 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   onOpenNewMeetingWithDate,
   onEditMeeting,
 }) => {
-  const { meetings, formatDisplayTime, settings } = useMeetingTracker();
+  const { meetings, formatDisplayTime, settings, calculateShiftSplit } = useMeetingTracker();
 
-  const [currentDate, setCurrentDateState] = useState<Date>(new Date('2026-09-10T10:00:00'));
-
-  const setCurrentDate = (d: Date | ((prev: Date) => Date)) => {
-    setCurrentDateState(prev => {
-      const next = typeof d === 'function' ? d(prev) : d;
-      try {
-        localStorage.setItem('meetpulse_calendar_date', next.toISOString());
-      } catch (e) {}
-      return next;
-    });
-  };
+  // Default to today on initial mount
+  const [currentDate, setCurrentDate] = useState<Date>(() => new Date());
 
   const [viewMode, setViewModeState] = useState<ViewMode>(() => {
     try {
@@ -508,10 +499,54 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                       );
                     })()}
 
+                    {/* Official Shift Boundaries (if shift tracking enabled) */}
+                    {settings.enableShiftTracking && (() => {
+                      const [ssh, ssm] = (settings.shiftStartTime || '09:30').split(':').map(Number);
+                      const [seh, sem] = (settings.shiftEndTime || '18:30').split(':').map(Number);
+                      const startTop = ((ssh * 60 + ssm) / 60) * HOUR_HEIGHT;
+                      const endTop = ((seh * 60 + sem) / 60) * HOUR_HEIGHT;
+                      return (
+                        <>
+                          <div
+                            className="absolute left-0 right-0 z-20 pointer-events-none border-t border-cyan-500/30 border-dashed"
+                            style={{ top: `${startTop}px` }}
+                            title={`Official Shift Start: ${settings.shiftStartTime || '09:30'}`}
+                          />
+                          <div
+                            className="absolute left-0 right-0 z-20 pointer-events-none border-t border-cyan-500/30 border-dashed"
+                            style={{ top: `${endTop}px` }}
+                            title={`Official Shift End: ${settings.shiftEndTime || '18:30'}`}
+                          />
+                        </>
+                      );
+                    })()}
+
+                    {/* Lunch Break Band (if lunch break enabled) */}
+                    {settings.enableShiftTracking && settings.enableLunchBreak !== false && (() => {
+                      const [lsh, lsm] = (settings.lunchStartTime || '13:00').split(':').map(Number);
+                      const [leh, lem] = (settings.lunchEndTime || '14:00').split(':').map(Number);
+                      const lunchTop = ((lsh * 60 + lsm) / 60) * HOUR_HEIGHT;
+                      const lunchHeight = Math.max(0, (((leh * 60 + lem) - (lsh * 60 + lsm)) / 60) * HOUR_HEIGHT);
+                      if (lunchHeight <= 0) return null;
+                      return (
+                        <div
+                          className="absolute left-0 right-0 z-10 pointer-events-none bg-amber-500/[0.04] border-y border-amber-500/20 border-dashed flex items-center justify-end pr-1.5"
+                          style={{ top: `${lunchTop}px`, height: `${lunchHeight}px` }}
+                          title={`Lunch Break: ${settings.lunchStartTime || '13:00'} - ${settings.lunchEndTime || '14:00'} (Excluded from shift working hours)`}
+                        >
+                          <span className="text-[8px] font-semibold text-amber-400/50 uppercase tracking-widest select-none">Lunch</span>
+                        </div>
+                      );
+                    })()}
+
                     {/* Positioned & Stretched Meeting Blocks */}
                     {positionedMeetings.map(({ meeting: m, top, height, leftPercent, widthPercent }) => {
                       const isMini = height < 34;
                       const isCompact = height < 58;
+                      const shiftSplit = settings.enableShiftTracking
+                        ? calculateShiftSplit(m.startTime, m.endTime, m.durationMinutes)
+                        : { inShiftMinutes: m.durationMinutes, overtimeMinutes: 0, lunchMinutes: 0 };
+                      const hasOvertime = shiftSplit.overtimeMinutes > 0;
 
                       return (
                         <div
@@ -532,16 +567,22 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                           className={`absolute z-10 p-2.5 rounded-xl border text-xs cursor-pointer transition-all hover:scale-[1.01] hover:z-20 hover:shadow-2xl overflow-hidden flex flex-col justify-start backdrop-blur-md shadow-md ${getWeekMeetingCardClass(
                             m.category
                           )}`}
-                          title={`${m.title} (${formatDisplayTime(m.startTime)} - ${formatDisplayTime(m.endTime)}, ${formatTime(m.durationMinutes)}) - Click to edit`}
+                          title={`${m.title} (${formatDisplayTime(m.startTime)} - ${formatDisplayTime(m.endTime)}, ${formatTime(m.durationMinutes)}${hasOvertime ? ` • ${shiftSplit.overtimeMinutes}m Overtime` : ''}) - Click to edit`}
                         >
                           {isMini ? (
                             <div className="flex items-center justify-between gap-1 text-[10px] leading-tight truncate">
-                              <span className="font-bold truncate text-white">{m.title}</span>
+                              <span className="font-bold truncate text-white flex items-center gap-1">
+                                {hasOvertime && <Moon className="w-2.5 h-2.5 text-amber-300 shrink-0" />}
+                                <span className="truncate">{m.title}</span>
+                              </span>
                               <span className="opacity-80 shrink-0 font-mono">{formatDisplayTime(m.startTime)}</span>
                             </div>
                           ) : isCompact ? (
                             <div className="space-y-0.5">
-                              <div className="font-bold text-white truncate leading-tight">{m.title}</div>
+                              <div className="font-bold text-white truncate leading-tight flex items-center gap-1">
+                                {hasOvertime && <Moon className="w-2.5 h-2.5 text-amber-300 shrink-0" />}
+                                <span className="truncate">{m.title}</span>
+                              </div>
                               <div className="text-[10px] opacity-85 truncate font-medium">
                                 {formatDisplayTime(m.startTime)} • {formatTime(m.durationMinutes)}
                               </div>
@@ -550,9 +591,20 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                             <div className="space-y-1 h-full flex flex-col">
                               <div className="flex items-start justify-between gap-1.5">
                                 <span className="font-bold text-white text-xs leading-snug line-clamp-2">{m.title}</span>
-                                <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-white/10 uppercase tracking-wider shrink-0">
-                                  {m.category}
-                                </span>
+                                <div className="flex items-center gap-1 shrink-0">
+                                  {hasOvertime && (
+                                    <span
+                                      className="px-1 py-0.5 rounded text-[9px] font-bold bg-amber-500/30 text-amber-200 border border-amber-500/40 flex items-center gap-0.5"
+                                      title={`${shiftSplit.overtimeMinutes}m Overtime / Non-Working Hours`}
+                                    >
+                                      <Moon className="w-2.5 h-2.5" />
+                                      <span>OT</span>
+                                    </span>
+                                  )}
+                                  <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-white/10 uppercase tracking-wider">
+                                    {m.category}
+                                  </span>
+                                </div>
                               </div>
                               <div className="text-[11px] opacity-90 font-medium">
                                 {formatDisplayTime(m.startTime)} - {formatDisplayTime(m.endTime)}

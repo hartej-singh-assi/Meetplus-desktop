@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMeetingTracker } from '../context/MeetingTrackerContext';
 import { ExportFormat, ExportConfig } from '../types';
-import { Download, FileSpreadsheet, Check, FileCode, Calendar } from 'lucide-react';
+import { Download, FileSpreadsheet, Check, FileCode, Calendar, Laptop, FileJson } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface ExportModalProps {
@@ -10,7 +10,7 @@ interface ExportModalProps {
 }
 
 export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose }) => {
-  const { triggerExport, meetings, workLogs } = useMeetingTracker();
+  const { triggerExport, exportAllDataAsJSON, meetings, workLogs } = useMeetingTracker();
 
   const [selectedFormat, setSelectedFormat] = useState<ExportFormat>('xlsx');
   const [dateRange, setDateRange] = useState<'all' | 'today' | 'this_week' | 'this_month' | 'custom'>('all');
@@ -179,6 +179,30 @@ export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose }) => 
                 <span>Daily Work & Target Achievement Log</span>
               </label>
             </div>
+          </div>
+
+          {/* Full JSON Migration Backup Box */}
+          <div className="p-3.5 rounded-xl bg-gradient-to-r from-indigo-950/40 to-slate-900 border border-indigo-500/30 flex items-center justify-between gap-3">
+            <div className="space-y-0.5">
+              <div className="font-bold text-white text-xs flex items-center gap-1.5">
+                <Laptop className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Switching Laptops or Need Full Backup?</span>
+              </div>
+              <p className="text-[10px] text-slate-400">
+                Download all raw records in JSON to import seamlessly on your new laptop.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                exportAllDataAsJSON();
+                onClose();
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shrink-0 transition-all shadow-md active:scale-95"
+            >
+              <FileJson className="w-3.5 h-3.5" />
+              <span>Full JSON Backup</span>
+            </button>
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">

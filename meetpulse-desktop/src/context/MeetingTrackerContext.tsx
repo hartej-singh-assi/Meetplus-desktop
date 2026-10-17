@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { MeetingRecord, WorkRecord, UserSettings, DailyKPISummary, ExportConfig, TabType, Sprint, SprintStatus } from '../types';
+import { MeetingRecord, WorkRecord, UserSettings, DailyKPISummary, ExportConfig, TabType, Sprint, SprintStatus, AppBackupData, ImportResult } from '../types';
 import { defaultSettings, generateSeedData, generateSeedSprints } from '../utils/seedData';
 import { exportRecordsToFormat } from '../utils/excelExport';
 import { format, subDays } from 'date-fns';
@@ -10,6 +10,72 @@ export interface PendingCompletionMeeting {
   durationMinutes: number;
   startDate: string;
   title: string;
+}
+
+export function calculateMeetingShiftSplit(
+  startTime: string,
+  endTime: string,
+  durationMinutes: number,
+  shiftStartTime: string = '09:30',
+  shiftEndTime: string = '18:30',
+  enableLunchBreak: boolean = true,
+  lunchStartTime: string = '13:00',
+  lunchEndTime: string = '14:00'
+): { inShiftMinutes: number; overtimeMinutes: number; lunchMinutes: number } {
+  const [sh, sm] = (startTime || '00:00').split(':').map(Number);
+  const [eh, em] = (endTime || '00:00').split(':').map(Number);
+  const [ssh, ssm] = (shiftStartTime || '09:30').split(':').map(Number);
+  const [seh, sem] = (shiftEndTime || '18:30').split(':').map(Number);
+
+  const startMins = sh * 60 + sm;
+  let endMins = eh * 60 + em;
+  const shiftStart = ssh * 60 + ssm;
+  const shiftEnd = seh * 60 + sem;
+
+  const getOverlap = (s1: number, e1: number, s2: number, e2: number): number => {
+    const s = Math.max(s1, s2);
+    const e = Math.min(e1, e2);
+    return e > s ? e - s : 0;
+  };
+
+  const [lsh, lsm] = (lunchStartTime || '13:00').split(':').map(Number);
+  const [leh, lem] = (lunchEndTime || '14:00').split(':').map(Number);
+  const lunchStart = lsh * 60 + lsm;
+  const lunchEnd = leh * 60 + lem;
+
+  let inShiftRaw = 0;
+  let lunchOverlap = 0;
+
+  if (endMins >= startMins) {
+    // Same-day meeting
+    inShiftRaw = getOverlap(startMins, endMins, shiftStart, shiftEnd);
+    if (enableLunchBreak && inShiftRaw > 0) {
+      const inShiftStart = Math.max(startMins, shiftStart);
+      const inShiftEnd = Math.min(endMins, shiftEnd);
+      lunchOverlap = getOverlap(inShiftStart, inShiftEnd, lunchStart, lunchEnd);
+    }
+  } else {
+    // Overnight meeting crossing midnight
+    // Part 1: startMins to 1440 (midnight)
+    const p1Shift = getOverlap(startMins, 1440, shiftStart, shiftEnd);
+    inShiftRaw += p1Shift;
+    if (enableLunchBreak && p1Shift > 0) {
+      lunchOverlap += getOverlap(Math.max(startMins, shiftStart), Math.min(1440, shiftEnd), lunchStart, lunchEnd);
+    }
+    // Part 2: 0 to endMins on the next day
+    const p2Shift = getOverlap(0, endMins, shiftStart, shiftEnd);
+    inShiftRaw += p2Shift;
+    if (enableLunchBreak && p2Shift > 0) {
+      lunchOverlap += getOverlap(Math.max(0, shiftStart), Math.min(endMins, shiftEnd), lunchStart, lunchEnd);
+    }
+  }
+
+  const inShiftWorking = Math.min(durationMinutes, Math.max(0, inShiftRaw - lunchOverlap));
+  // Overtime is strictly meeting minutes outside official shift hours (lunch is NOT counted as overtime)
+  const overtime = Math.max(0, durationMinutes - inShiftRaw);
+  const lunchMinutes = Math.min(durationMinutes, lunchOverlap);
+
+  return { inShiftMinutes: inShiftWorking, overtimeMinutes: overtime, lunchMinutes };
 }
 
 interface MeetingTrackerContextType {
@@ -23,6 +89,7 @@ interface MeetingTrackerContextType {
   setActiveTab: (tab: TabType) => void;
   addMeeting: (meeting: Omit<MeetingRecord, 'id' | 'totalImpactMinutes'>) => void;
   deleteMeeting: (id: string) => void;
+  calculateShiftSplit: (startTime: string, endTime: string, durationMinutes: number) => { inShiftMinutes: number; overtimeMinutes: number; lunchMinutes: number };
   updateMeeting: (id: string, meeting: Partial<MeetingRecord>) => void;
   addWorkLog: (work: Omit<WorkRecord, 'id'>) => void;
   updateWorkLog: (id: string, work: Partial<WorkRecord>) => void;
@@ -43,6 +110,9 @@ interface MeetingTrackerContextType {
     percentageUsed: number;
   };
   triggerExport: (config: ExportConfig) => void;
+  exportAllDataAsJSON: (filename?: string) => void;
+  importDataFromJSON: (rawInput: string | AppBackupData, mode?: 'replace' | 'merge') => ImportResult;
+  loadBundledBackup: () => Promise<ImportResult>;
   resetToSeedData: () => void;
   clearAllData: () => void;
   clearDataOlderThan: (days: number) => void;
@@ -431,12 +501,250 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
     setWorkLogs(prev => prev.filter(w => w.date >= cutoffStr));
   };
 
+  // Full System Export (JSON format)
+  const exportAllDataAsJSON = (customFilename?: string) => {
+    const backup: AppBackupData = {
+      version: '1.0',
+      exportTimestamp: new Date().toISOString(),
+      appName: 'MeetPulse Desktop',
+      meetings,
+      workLogs,
+      sprints,
+      settings,
+      activeTab,
+    };
+
+    const jsonStr = JSON.stringify(backup, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const dateStr = format(new Date(), 'yyyy-MM-dd_HH-mm');
+    const filename = customFilename || `meetpulse-backup-${dateStr}.json`;
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  // Full System Import / Restore (JSON format)
+  const importDataFromJSON = (
+    rawInput: string | AppBackupData,
+    mode: 'replace' | 'merge' = 'replace'
+  ): ImportResult => {
+    try {
+      let parsed: any;
+      if (typeof rawInput === 'string') {
+        parsed = JSON.parse(rawInput);
+      } else {
+        parsed = rawInput;
+      }
+
+      if (!parsed || typeof parsed !== 'object') {
+        return {
+          success: false,
+          message: 'Invalid backup: JSON must be an object.',
+          importedMeetings: 0,
+          importedSprints: 0,
+          importedWorkLogs: 0,
+          updatedSettings: false,
+        };
+      }
+
+      const importedMeetingsRaw: MeetingRecord[] = Array.isArray(parsed.meetings) ? parsed.meetings : [];
+      const importedSprintsRaw: Sprint[] = Array.isArray(parsed.sprints) ? parsed.sprints : [];
+      const importedWorkLogsRaw: WorkRecord[] = Array.isArray(parsed.workLogs) ? parsed.workLogs : [];
+      const importedSettings: UserSettings | undefined = parsed.settings && typeof parsed.settings === 'object' ? parsed.settings : undefined;
+
+      const today = format(new Date(), 'yyyy-MM-dd');
+      let finalSprints: Sprint[];
+      let finalMeetings: MeetingRecord[];
+      let finalWorkLogs: WorkRecord[];
+
+      if (mode === 'replace') {
+        finalSprints = normalizeSprints(importedSprintsRaw, today);
+        finalMeetings = mapMeetingsToSprints(importedMeetingsRaw, finalSprints);
+        finalWorkLogs = importedWorkLogsRaw;
+        if (importedSettings) {
+          const mergedSettings = { ...defaultSettings, ...importedSettings };
+          setSettings(mergedSettings);
+          try {
+            localStorage.setItem(LOCAL_STORAGE_KEY_SETTINGS, JSON.stringify(mergedSettings));
+          } catch (e) {}
+        }
+      } else {
+        // Merge mode
+        const existingSprintIds = new Set(sprints.map(s => s.id));
+        const existingSprintNames = new Set(sprints.map(s => s.name.toLowerCase()));
+        const mergedSprints = [...sprints];
+        importedSprintsRaw.forEach(s => {
+          if (!existingSprintIds.has(s.id) && !existingSprintNames.has(s.name.toLowerCase())) {
+            mergedSprints.push(s);
+            existingSprintIds.add(s.id);
+          }
+        });
+        finalSprints = normalizeSprints(mergedSprints, today);
+
+        const existingMeetingIds = new Set(meetings.map(m => m.id));
+        const existingMeetingKey = new Set(meetings.map(m => `${m.date}_${m.startTime}_${m.title.toLowerCase()}`));
+        const mergedMeetings = [...meetings];
+        importedMeetingsRaw.forEach(m => {
+          const key = `${m.date}_${m.startTime}_${m.title.toLowerCase()}`;
+          if (!existingMeetingIds.has(m.id) && !existingMeetingKey.has(key)) {
+            mergedMeetings.push(m);
+            existingMeetingIds.add(m.id);
+          }
+        });
+        finalMeetings = mapMeetingsToSprints(mergedMeetings, finalSprints);
+
+        const existingWorkIds = new Set(workLogs.map(w => w.id));
+        const existingWorkDates = new Set(workLogs.map(w => w.date));
+        const mergedWork = [...workLogs];
+        importedWorkLogsRaw.forEach(w => {
+          if (!existingWorkIds.has(w.id) && !existingWorkDates.has(w.date)) {
+            mergedWork.push(w);
+            existingWorkIds.add(w.id);
+          }
+        });
+        finalWorkLogs = mergedWork;
+
+        if (importedSettings) {
+          setSettings(prev => {
+            const merged = { ...prev, ...importedSettings };
+            try {
+              localStorage.setItem(LOCAL_STORAGE_KEY_SETTINGS, JSON.stringify(merged));
+            } catch (e) {}
+            return merged;
+          });
+        }
+      }
+
+      // Save directly to localStorage immediately
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY_SPRINTS, JSON.stringify(finalSprints));
+        localStorage.setItem(LOCAL_STORAGE_KEY_MEETINGS, JSON.stringify(finalMeetings));
+        localStorage.setItem(LOCAL_STORAGE_KEY_WORK, JSON.stringify(finalWorkLogs));
+      } catch (e) {
+        console.error('Error persisting to localStorage:', e);
+      }
+
+      // Update state
+      setSprints(finalSprints);
+      setMeetings(finalMeetings);
+      setWorkLogs(finalWorkLogs);
+
+      if (parsed.activeTab && typeof parsed.activeTab === 'string') {
+        setActiveTab(parsed.activeTab as TabType);
+      }
+
+      return {
+        success: true,
+        message: `Successfully restored ${importedMeetingsRaw.length} meetings, ${importedSprintsRaw.length} sprints, and ${importedWorkLogsRaw.length} work records (${mode === 'replace' ? 'Complete Replacement' : 'Merged with Existing'}).`,
+        importedMeetings: importedMeetingsRaw.length,
+        importedSprints: importedSprintsRaw.length,
+        importedWorkLogs: importedWorkLogsRaw.length,
+        updatedSettings: !!importedSettings,
+      };
+    } catch (err: any) {
+      return {
+        success: false,
+        message: `Failed to import data: ${err.message || 'Invalid JSON syntax'}`,
+        importedMeetings: 0,
+        importedSprints: 0,
+        importedWorkLogs: 0,
+        updatedSettings: false,
+      };
+    }
+  };
+
+  // Automated loader for bundled repository backup (meetpulse-backup.json)
+  const loadBundledBackup = async (): Promise<ImportResult> => {
+    try {
+      let jsonText = '';
+
+      // 1. Try fetching from web/Vite public assets
+      try {
+        const pathsToTry = ['./meetpulse-backup.json', '/meetpulse-backup.json', 'meetpulse-backup.json'];
+        for (const p of pathsToTry) {
+          const res = await fetch(p);
+          if (res.ok) {
+            jsonText = await res.text();
+            if (jsonText.includes('meetings')) break;
+          }
+        }
+      } catch (e) {
+        // Fetch failed in Electron file:// protocol or offline
+      }
+
+      // 2. Try Node.js fs if running in Electron
+      if (!jsonText && typeof window !== 'undefined' && (window as any).require) {
+        try {
+          const fs = (window as any).require('fs');
+          const path = (window as any).require('path');
+          const possiblePaths = [
+            path.resolve(__dirname, '../meetpulse-backup.json'),
+            path.resolve(__dirname, './meetpulse-backup.json'),
+            path.resolve(__dirname, '../public/meetpulse-backup.json'),
+            path.join(process.cwd(), 'meetpulse-backup.json'),
+            path.join(process.cwd(), 'public/meetpulse-backup.json'),
+          ];
+          for (const cand of possiblePaths) {
+            if (fs.existsSync(cand)) {
+              jsonText = fs.readFileSync(cand, 'utf-8');
+              break;
+            }
+          }
+        } catch (e) {
+          console.warn('Node fs fallback error:', e);
+        }
+      }
+
+      if (!jsonText) {
+        return {
+          success: false,
+          message: 'Could not auto-locate meetpulse-backup.json. Please use the "Choose Backup File" button to select your backup JSON file.',
+          importedMeetings: 0,
+          importedSprints: 0,
+          importedWorkLogs: 0,
+          updatedSettings: false,
+        };
+      }
+
+      return importDataFromJSON(jsonText, 'replace');
+    } catch (err: any) {
+      return {
+        success: false,
+        message: `Failed to load bundled backup: ${err.message || 'Unknown error'}`,
+        importedMeetings: 0,
+        importedSprints: 0,
+        importedWorkLogs: 0,
+        updatedSettings: false,
+      };
+    }
+  };
+
   const resetToSeedData = () => {
     const seed = generateSeedData();
     setMeetings(seed.meetings);
     setWorkLogs(seed.workLogs);
     setSprints(seed.sprints);
     setSettings(defaultSettings);
+  };
+
+  // Helper to calculate meeting hours split into in-shift vs overtime/non-working hours
+  const calculateShiftSplit = (startTime: string, endTime: string, durationMinutes: number) => {
+    return calculateMeetingShiftSplit(
+      startTime,
+      endTime,
+      durationMinutes,
+      settings.shiftStartTime || '09:30',
+      settings.shiftEndTime || '18:30',
+      settings.enableLunchBreak ?? true,
+      settings.lunchStartTime || '13:00',
+      settings.lunchEndTime || '14:00'
+    );
   };
 
   // Compute Daily Summaries
@@ -459,11 +767,56 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
         : 0;
       const totalImpactMinutes = totalDirectMinutes + totalLostMinutes;
 
+      // In-Shift vs Overtime calculations
+      let inShiftMins = 0;
+      let overtimeMins = 0;
+      let lunchMins = 0;
+      dayMeetings.forEach(m => {
+        const split = calculateMeetingShiftSplit(
+          m.startTime,
+          m.endTime,
+          m.durationMinutes,
+          settings.shiftStartTime || '09:30',
+          settings.shiftEndTime || '18:30',
+          settings.enableLunchBreak ?? true,
+          settings.lunchStartTime || '13:00',
+          settings.lunchEndTime || '14:00'
+        );
+        inShiftMins += split.inShiftMinutes;
+        overtimeMins += split.overtimeMinutes;
+        lunchMins += split.lunchMinutes;
+      });
+
+      const inShiftMeetingHours = Number((inShiftMins / 60).toFixed(2));
+      const overtimeMeetingHours = Number((overtimeMins / 60).toFixed(2));
+      const lunchMeetingHours = Number((lunchMins / 60).toFixed(2));
+
       const totalDirectMeetingHours = Number((totalDirectMinutes / 60).toFixed(2));
       const totalTimeLostHours = Number((totalLostMinutes / 60).toFixed(2));
       const totalMeetingImpactHours = Number((totalImpactMinutes / 60).toFixed(2));
 
-      const workingHours = settings.workingHoursPerDay || 8.0;
+      // Calculate working hours: when shift tracking is enabled, official working hours = shift duration minus lunch break
+      let workingHours = settings.workingHoursPerDay || 8.0;
+      if (settings.enableShiftTracking) {
+        const [ssh, ssm] = (settings.shiftStartTime || '09:30').split(':').map(Number);
+        const [seh, sem] = (settings.shiftEndTime || '18:30').split(':').map(Number);
+        const sStart = ssh * 60 + ssm;
+        const sEnd = seh * 60 + sem;
+        const shiftDuration = sEnd >= sStart ? sEnd - sStart : (1440 - sStart) + sEnd;
+
+        let lunchDuration = 0;
+        if (settings.enableLunchBreak !== false) {
+          const [lsh, lsm] = (settings.lunchStartTime || '13:00').split(':').map(Number);
+          const [leh, lem] = (settings.lunchEndTime || '14:00').split(':').map(Number);
+          const lStart = lsh * 60 + lsm;
+          const lEnd = leh * 60 + lem;
+          lunchDuration = lEnd >= lStart ? lEnd - lStart : (1440 - lStart) + lEnd;
+        }
+
+        const netWorkingMins = Math.max(60, shiftDuration - lunchDuration);
+        workingHours = Number((netWorkingMins / 60).toFixed(2));
+      }
+
       const availableFocusHours = Math.max(0, Number((workingHours - totalMeetingImpactHours).toFixed(2)));
 
       const targetFocusHours = dayWork ? dayWork.targetFocusHours : settings.defaultTargetFocusHours;
@@ -487,6 +840,9 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
         targetFocusHours,
         targetAchievementPercentage,
         disruptionIndex,
+        inShiftMeetingHours,
+        overtimeMeetingHours,
+        lunchMeetingHours,
       };
     });
   }, [meetings, workLogs, settings]);
@@ -504,6 +860,9 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
         targetFocusHours: settings.defaultTargetFocusHours,
         targetAchievementPercentage: 0,
         disruptionIndex: 0,
+        inShiftMeetingHours: 0,
+        overtimeMeetingHours: 0,
+        lunchMeetingHours: 0,
       }
     );
   }, [dailySummaries, todayStr, settings]);
@@ -579,10 +938,14 @@ export const MeetingTrackerProvider: React.FC<{ children: React.ReactNode }> = (
         todaySummary,
         storageStats,
         triggerExport,
+        exportAllDataAsJSON,
+        importDataFromJSON,
+        loadBundledBackup,
         resetToSeedData,
         clearAllData,
         clearDataOlderThan,
         formatDisplayTime,
+        calculateShiftSplit,
 
         // Timer context values
         timerRunning,
